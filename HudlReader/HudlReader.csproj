@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="CsvHelper" Version="33.1.0" />
+      <PackageReference Include="PdfPig" Version="0.1.12-alpha-20251002-c28d1" />
+      <PackageReference Include="System.CommandLine" Version="2.0.0-rc.1.25451.107" />
+    </ItemGroup>
+
+</Project>
