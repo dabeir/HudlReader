@@ -4,6 +4,7 @@
 *.iml
 *.orig
 *.diff
+*.pdf
 bin/
 obj/
 _ReSharper*
@@ -14,7 +15,7 @@ Thumbs.db
 /packages/
 Build/
 /paket-files/
-/Src/.vs/*
-/Src/.idea/*
+/.vs/*
+/.idea/*
 /Tools/OfficeDocToPdfConverter/.paket/paket.bootstrapper.exe
 TestResults/

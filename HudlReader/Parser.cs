@@ -1,6 +1,6 @@
 namespace HudlReader;
 
-public class Parser(string inputDirectory)
+public class Parser(string inputDirectory, string csvOutputDirectory)
 {
     public async Task Parse()
     {
@@ -31,7 +31,7 @@ public class Parser(string inputDirectory)
         {
             CsvExportService csvExportService = new();
             List<InStatSnapshot> sortedList = inStatList.OrderBy(x => x.ReportDate).ToList();
-            await csvExportService.Write(sortedList, "C:\\Users\\MattB\\source\\prototype\\HudlReader\\CsvOutput\\instat_export.csv");
+            await csvExportService.Write(sortedList, Path.Combine(csvOutputDirectory, "output.csv"));
         }
     }
 }
