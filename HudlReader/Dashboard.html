@@ -21,7 +21,6 @@
         }
 
         .container {
-            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -287,7 +286,7 @@
 
     function parseCSVData(csvData) {
         return csvData.map(row => {
-            const opponent = row.ReportName ? row.ReportName.split(/\d+:/)[0].trim() : 'Unknown';
+            const opponent = row.OpponentName;
             return {
                 date: row.ReportDate,
                 opponent: opponent.substring(0, 20),
@@ -308,6 +307,7 @@
                 blocks: parseInt(row.BlockedShots) || 0,
                 playerName: row.PlayerName,
                 teamName: row.TeamName,
+				opponentName: row.OpponentName,
                 jerseyNumber: row.PlayerJerseyNumber
             };
         });
