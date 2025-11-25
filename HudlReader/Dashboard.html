@@ -303,8 +303,21 @@
                     <div class="stat-value" id="totalHitsReceived">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Avg Time on Ice</div>
-                    <div class="stat-value" id="avgTimeOnIce">0:00</div>
+                    <div class="stat-label">Time on Ice</div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="minTimeOnIce">0:00</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="maxTimeOnIce">0:00</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="avgTimeOnIce">0:00</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -405,25 +418,39 @@
             const totalGoals = data.reduce((sum, g) => sum + g.goals, 0);
             const totalPlusMinus = data.reduce((sum, g) => sum + g.plusMinus, 0);
             const minPlusMinus = Math.min(...data.map(g => g.plusMinus));
+            const minPlusMinusGame = data.find(g => g.plusMinus === minPlusMinus);
             const maxPlusMinus = Math.max(...data.map(g => g.plusMinus));
+            const maxPlusMinusGame = data.find(g => g.plusMinus === maxPlusMinus);
             const avgPlusMinus = (totalPlusMinus / totalGames).toFixed(1);
             const totalBlockedShots = data.reduce((sum, g) => sum + g.blocks, 0);
             const minBlockedShots = Math.min(...data.map(g => g.blocks));
+            const minBlockedShotsGame = data.find(g => g.blocks === minBlockedShots);
             const maxBlockedShots = Math.max(...data.map(g => g.blocks));
+            const maxBlockedShotsGame = data.find(g => g.blocks === maxBlockedShots);
             const avgBlockedShots = (totalBlockedShots / totalGames).toFixed(1);
             const totalHitsDelivered = data.reduce((sum, game) => sum + game.hits, 0);
             const totalHitsReceived = data.reduce((sum, game) => sum + game.hitsAgainst, 0);
             const totalToiMinutes = data.reduce((sum, game) => sum + timeToMinutes(game.toi), 0);
             const avgToiMinutes = totalToiMinutes / totalGames;
             const avgToiDisplay = Math.floor(avgToiMinutes) + ':' + String(Math.round((avgToiMinutes % 1) * 60)).padStart(2, '0');
+            const minToiMinutes = Math.min(...data.map(game => timeToMinutes(game.toi)));
+            const minToiDisplay = Math.floor(minToiMinutes) + ':' + String(Math.round((minToiMinutes % 1) * 60)).padStart(2, '0');
+            const minToiGame = data.find(game => timeToMinutes(game.toi) === minToiMinutes);
+            const maxToiMinutes = Math.max(...data.map(game => timeToMinutes(game.toi)));
+            const maxToiDisplay = Math.floor(maxToiMinutes) + ':' + String(Math.round((maxToiMinutes % 1) * 60)).padStart(2, '0');
+            const maxToiGame = data.find(game => timeToMinutes(game.toi) === maxToiMinutes);
             const totalAssists = data.reduce((sum, g) => sum + g.assists, 0);
             const totalPoints = data.reduce((sum, g) => sum + g.points, 0);
             const minPoints = Math.min(...data.map(g => g.points));
+            const minPointsGame = data.find(g => g.points === minPoints);
             const maxPoints = Math.max(...data.map(g => g.points));
+            const maxPointsGame = data.find(g => g.points === maxPoints);
             const avgPoints = (totalPoints / totalGames).toFixed(1);
             const avgIndex = Math.round(data.reduce((sum, g) => sum + g.index, 0) / totalGames);
             const minIndex = Math.min(...data.map(g => g.index));
+            const minIndexGame = data.find(g => g.index === minIndex);
             const maxIndex = Math.max(...data.map(g => g.index));
+            const maxIndexGame = data.find(g => g.index === maxIndex);
             const totalShots = data.reduce((sum, g) => sum + g.shots, 0);
             const totalSOG = data.reduce((sum, g) => sum + g.sog, 0);
             const shotAccuracy = totalShots > 0 ? Math.round((totalSOG / totalShots) * 100) : 0;
@@ -432,23 +459,35 @@
             document.getElementById('totalGoals').textContent = totalGoals;
             document.getElementById('totalPlusMinus').textContent = totalPlusMinus;
             document.getElementById('minPlusMinus').textContent = minPlusMinus;
+            document.getElementById('minPlusMinus').title = 'vs ' + minPlusMinusGame.opponent;
             document.getElementById('maxPlusMinus').textContent = maxPlusMinus;
+            document.getElementById('maxPlusMinus').title = 'vs ' + maxPlusMinusGame.opponent;
             document.getElementById('avgPlusMinus').textContent = avgPlusMinus;
             document.getElementById('totalBlockedShots').textContent = totalBlockedShots;
             document.getElementById('minBlockedShots').textContent = minBlockedShots;
+            document.getElementById('minBlockedShots').title = 'vs ' + minBlockedShotsGame.opponent;
             document.getElementById('maxBlockedShots').textContent = maxBlockedShots;
+            document.getElementById('maxBlockedShots').title = 'vs ' + maxBlockedShotsGame.opponent;
             document.getElementById('avgBlockedShots').textContent = avgBlockedShots;
             document.getElementById('totalHitsDelivered').textContent = totalHitsDelivered;
             document.getElementById('totalHitsReceived').textContent = totalHitsReceived;
             document.getElementById('avgTimeOnIce').textContent = avgToiDisplay;
+            document.getElementById('minTimeOnIce').textContent = minToiDisplay;
+            document.getElementById('minTimeOnIce').title = 'vs ' + minToiGame.opponent;
+            document.getElementById('maxTimeOnIce').textContent = maxToiDisplay;
+            document.getElementById('maxTimeOnIce').title = 'vs ' + maxToiGame.opponent;
             document.getElementById('totalAssists').textContent = totalAssists;
             document.getElementById('totalPoints').textContent = totalPoints;
             document.getElementById('minPoints').textContent = minPoints;
+            document.getElementById('minPoints').title = 'vs ' + minPointsGame.opponent;
             document.getElementById('maxPoints').textContent = maxPoints;
+            document.getElementById('maxPoints').title = 'vs ' + maxPointsGame.opponent;
             document.getElementById('avgPoints').textContent = avgPoints;
             document.getElementById('avgIndex').textContent = avgIndex;
             document.getElementById('minIndex').textContent = minIndex;
+            document.getElementById('minIndex').title = 'vs ' + minIndexGame.opponent;
             document.getElementById('maxIndex').textContent = maxIndex;
+            document.getElementById('maxIndex').title = 'vs ' + maxIndexGame.opponent;
             document.getElementById('shotAccuracy').textContent = shotAccuracy + '%';
 
             // Chart 1: InStat Index
