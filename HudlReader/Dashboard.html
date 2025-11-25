@@ -21,6 +21,7 @@
         }
 
         .container {
+            max-width: 1400px;
             margin: 0 auto;
         }
 
@@ -173,116 +174,185 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div class="upload-section">
-        <h2>Hockey Performance Analytics Dashboard</h2>
-        <p style="color: #666; margin-bottom: 20px;">Upload a CSV file with hockey statistics to visualize performance data</p>
-        <div class="file-input-wrapper">
-            <input type="file" id="csvFile" accept=".csv" onchange="handleFileUpload(event)">
-            <label for="csvFile" class="file-input-label">Choose CSV File</label>
+    <div class="container">
+        <div class="upload-section">
+            <h2>Hockey Performance Analytics Dashboard</h2>
+            <p style="color: #666; margin-bottom: 20px;">Upload a CSV file with hockey statistics to visualize performance data</p>
+            <div class="file-input-wrapper">
+                <input type="file" id="csvFile" accept=".csv" onchange="handleFileUpload(event)">
+                <label for="csvFile" class="file-input-label">Choose CSV File</label>
+            </div>
+            <span class="file-name" id="fileName">No file selected</span>
+            <div class="error-message" id="errorMessage"></div>
         </div>
-        <span class="file-name" id="fileName">No file selected</span>
-        <div class="error-message" id="errorMessage"></div>
+
+        <div class="content-section" id="dashboard">
+            <div class="header">
+                <h1 id="playerName">Player Performance Dashboard</h1>
+                <p id="playerInfo">Loading...</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-label">Total Games</div>
+                    <div class="stat-value" id="totalGames">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Goals/Assists</div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Goals</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #667eea;" id="totalGoals">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Assists</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #667eea;" id="totalAssists">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Points</div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="minPoints">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="maxPoints">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="avgPoints">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Total</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="totalPoints">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">InStat Index</div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="minIndex">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="maxIndex">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="avgIndex">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Shot Accuracy</div>
+                    <div class="stat-value" id="shotAccuracy">0%</div>
+                </div>
+				<div class="stat-card">
+                    <div class="stat-label">Plus/Minus</div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="minPlusMinus">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="maxPlusMinus">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="avgPlusMinus">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Total</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="totalPlusMinus">0</div>
+                        </div>
+                    </div>
+                </div>
+				<div class="stat-card">
+                    <div class="stat-label">Blocked Shots</div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="minBlockedShots">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="maxBlockedShots">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="avgBlockedShots">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Total</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="totalBlockedShots">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Hits Delivered</div>
+                    <div class="stat-value" id="totalHitsDelivered">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Hits Received</div>
+                    <div class="stat-value" id="totalHitsReceived">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Avg Time on Ice</div>
+                    <div class="stat-value" id="avgTimeOnIce">0:00</div>
+                </div>
+            </div>
+
+            <div class="charts-grid">
+                <div class="chart-container">
+                    <div class="chart-title">InStat Index by Game</div>
+                    <canvas id="indexChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Points Distribution</div>
+                    <canvas id="pointsChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Time on Ice (Minutes)</div>
+                    <canvas id="timeChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Plus/Minus Trend</div>
+                    <canvas id="plusMinusChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Shots vs Shots on Goal</div>
+                    <canvas id="shotsChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Special Teams Time</div>
+                    <canvas id="specialTeamsChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Corsi Events Distribution</div>
+                    <canvas id="corsiChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <div class="chart-title">Physical Play Metrics</div>
+                    <canvas id="physicalChart"></canvas>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div class="content-section" id="dashboard">
-        <div class="header">
-            <h1 id="playerName">Player Performance Dashboard</h1>
-            <p id="playerInfo">Loading...</p>
-        </div>
+    <script>
+        let chartInstances = {};
 
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-label">Total Games</div>
-                <div class="stat-value" id="totalGames">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Total Goals</div>
-                <div class="stat-value" id="totalGoals">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Total Assists</div>
-                <div class="stat-value" id="totalAssists">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Total Points</div>
-                <div class="stat-value" id="totalPoints">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Avg InStat Index</div>
-                <div class="stat-value" id="avgIndex">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Shot Accuracy</div>
-                <div class="stat-value" id="shotAccuracy">0%</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Total +/-</div>
-                <div class="stat-value" id="totalPlusMinus">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Total Blocked Shots</div>
-                <div class="stat-value" id="totalBlockedShots">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Total Hits Delivered</div>
-                <div class="stat-value" id="totalHitsDelivered">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Total Hits Received</div>
-                <div class="stat-value" id="totalHitsReceived">0</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Avg Time on Ice</div>
-                <div class="stat-value" id="avgTimeOnIce">0:00</div>
-            </div>
-        </div>
-
-        <div class="charts-grid">
-            <div class="chart-container">
-                <div class="chart-title">InStat Index by Game</div>
-                <canvas id="indexChart"></canvas>
-            </div>
-            <div class="chart-container">
-                <div class="chart-title">Points Distribution</div>
-                <canvas id="pointsChart"></canvas>
-            </div>
-            <div class="chart-container">
-                <div class="chart-title">Time on Ice (Minutes)</div>
-                <canvas id="timeChart"></canvas>
-            </div>
-            <div class="chart-container">
-                <div class="chart-title">Plus/Minus Trend</div>
-                <canvas id="plusMinusChart"></canvas>
-            </div>
-            <div class="chart-container">
-                <div class="chart-title">Shots vs Shots on Goal</div>
-                <canvas id="shotsChart"></canvas>
-            </div>
-            <div class="chart-container">
-                <div class="chart-title">Special Teams Time</div>
-                <canvas id="specialTeamsChart"></canvas>
-            </div>
-            <div class="chart-container">
-                <div class="chart-title">Corsi Events Distribution</div>
-                <canvas id="corsiChart"></canvas>
-            </div>
-            <div class="chart-container">
-                <div class="chart-title">Physical Play Metrics</div>
-                <canvas id="physicalChart"></canvas>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    let chartInstances = {};
-
-    function timeToMinutes(timeStr) {
-        if (!timeStr) return 0;
-        const parts = timeStr.split(':');
-        return parseInt(parts[0]) * 60 + parseInt(parts[1]) + parseInt(parts[2]) / 60;
-    }
+        function timeToMinutes(timeStr) {
+            if (!timeStr) return 0;
+            const parts = timeStr.split(':');
+            return parseInt(parts[0]) * 60 + parseInt(parts[1]) + parseInt(parts[2]) / 60;
+        }
 
     function parseCSVData(csvData) {
         return csvData.map(row => {
@@ -313,287 +383,358 @@
         });
     }
 
-    function destroyCharts() {
-        Object.values(chartInstances).forEach(chart => {
-            if (chart) chart.destroy();
-        });
-        chartInstances = {};
-    }
-
-    function renderDashboard(data) {
-        destroyCharts();
-
-        // Update header info
-        if (data.length > 0) {
-            document.getElementById('playerName').textContent = data[0].playerName + ' - Season Performance Dashboard';
-            document.getElementById('playerInfo').textContent =
-                `${data[0].teamName} | Jersey #${data[0].jerseyNumber}`;
+        function destroyCharts() {
+            Object.values(chartInstances).forEach(chart => {
+                if (chart) chart.destroy();
+            });
+            chartInstances = {};
         }
 
-        // Calculate summary stats
-        const totalGames = data.length;
-        const totalGoals = data.reduce((sum, g) => sum + g.goals, 0);
-        const totalPlusMinus = data.reduce((sum, g) => sum + g.plusMinus, 0);
-        const totalBlockedShots = data.reduce((sum, g) => sum + g.blocks, 0);
-        const totalHitsDelivered = data.reduce((sum, game) => sum + game.hits, 0);
-        const totalHitsReceived = data.reduce((sum, game) => sum + game.hitsAgainst, 0);
-        const totalToiMinutes = data.reduce((sum, game) => sum + timeToMinutes(game.toi), 0);
-        const avgToiMinutes = totalToiMinutes / totalGames;
-        const avgToiDisplay = Math.floor(avgToiMinutes) + ':' + String(Math.round((avgToiMinutes % 1) * 60)).padStart(2, '0');
-        const totalAssists = data.reduce((sum, g) => sum + g.assists, 0);
-        const totalPoints = data.reduce((sum, g) => sum + g.points, 0);
-        const avgIndex = Math.round(data.reduce((sum, g) => sum + g.index, 0) / totalGames);
-        const totalShots = data.reduce((sum, g) => sum + g.shots, 0);
-        const totalSOG = data.reduce((sum, g) => sum + g.sog, 0);
-        const shotAccuracy = totalShots > 0 ? Math.round((totalSOG / totalShots) * 100) : 0;
+        function renderDashboard(data) {
+            destroyCharts();
 
-        document.getElementById('totalGames').textContent = totalGames;
-        document.getElementById('totalGoals').textContent = totalGoals;
-        document.getElementById('totalPlusMinus').textContent = totalPlusMinus;
-        document.getElementById('totalBlockedShots').textContent = totalBlockedShots;
-        document.getElementById('totalHitsDelivered').textContent = totalHitsDelivered;
-        document.getElementById('totalHitsReceived').textContent = totalHitsReceived;
-        document.getElementById('avgTimeOnIce').textContent = avgToiDisplay;
-        document.getElementById('totalAssists').textContent = totalAssists;
-        document.getElementById('totalPoints').textContent = totalPoints;
-        document.getElementById('avgIndex').textContent = avgIndex;
-        document.getElementById('shotAccuracy').textContent = shotAccuracy + '%';
-
-        // Chart 1: InStat Index
-        chartInstances.index = new Chart(document.getElementById('indexChart'), {
-            type: 'line',
-            data: {
-                labels: data.map(g => g.opponent),
-                datasets: [{
-                    label: 'InStat Index',
-                    data: data.map(g => g.index),
-                    borderColor: '#667eea',
-                    backgroundColor: 'rgba(102, 126, 234, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: { legend: { display: false } }
+            // Update header info
+            if (data.length > 0) {
+                document.getElementById('playerName').textContent = data[0].playerName + ' - Season Performance Dashboard';
+                document.getElementById('playerInfo').textContent = 
+                    `${data[0].teamName} | Jersey #${data[0].jerseyNumber}`;
             }
-        });
 
-        // Chart 2: Points Distribution
-        chartInstances.points = new Chart(document.getElementById('pointsChart'), {
-            type: 'bar',
-            data: {
-                labels: data.map(g => g.opponent),
-                datasets: [{
-                    label: 'Goals',
-                    data: data.map(g => g.goals),
-                    backgroundColor: '#4ade80'
-                }, {
-                    label: 'Assists',
-                    data: data.map(g => g.assists),
-                    backgroundColor: '#60a5fa'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                scales: {
-                    x: { stacked: true },
-                    y: { stacked: true, beginAtZero: true }
+            // Calculate summary stats
+            const totalGames = data.length;
+            const totalGoals = data.reduce((sum, g) => sum + g.goals, 0);
+            const totalPlusMinus = data.reduce((sum, g) => sum + g.plusMinus, 0);
+            const minPlusMinus = Math.min(...data.map(g => g.plusMinus));
+            const maxPlusMinus = Math.max(...data.map(g => g.plusMinus));
+            const avgPlusMinus = (totalPlusMinus / totalGames).toFixed(1);
+            const totalBlockedShots = data.reduce((sum, g) => sum + g.blocks, 0);
+            const minBlockedShots = Math.min(...data.map(g => g.blocks));
+            const maxBlockedShots = Math.max(...data.map(g => g.blocks));
+            const avgBlockedShots = (totalBlockedShots / totalGames).toFixed(1);
+            const totalHitsDelivered = data.reduce((sum, game) => sum + game.hits, 0);
+            const totalHitsReceived = data.reduce((sum, game) => sum + game.hitsAgainst, 0);
+            const totalToiMinutes = data.reduce((sum, game) => sum + timeToMinutes(game.toi), 0);
+            const avgToiMinutes = totalToiMinutes / totalGames;
+            const avgToiDisplay = Math.floor(avgToiMinutes) + ':' + String(Math.round((avgToiMinutes % 1) * 60)).padStart(2, '0');
+            const totalAssists = data.reduce((sum, g) => sum + g.assists, 0);
+            const totalPoints = data.reduce((sum, g) => sum + g.points, 0);
+            const minPoints = Math.min(...data.map(g => g.points));
+            const maxPoints = Math.max(...data.map(g => g.points));
+            const avgPoints = (totalPoints / totalGames).toFixed(1);
+            const avgIndex = Math.round(data.reduce((sum, g) => sum + g.index, 0) / totalGames);
+            const minIndex = Math.min(...data.map(g => g.index));
+            const maxIndex = Math.max(...data.map(g => g.index));
+            const totalShots = data.reduce((sum, g) => sum + g.shots, 0);
+            const totalSOG = data.reduce((sum, g) => sum + g.sog, 0);
+            const shotAccuracy = totalShots > 0 ? Math.round((totalSOG / totalShots) * 100) : 0;
+
+            document.getElementById('totalGames').textContent = totalGames;
+            document.getElementById('totalGoals').textContent = totalGoals;
+            document.getElementById('totalPlusMinus').textContent = totalPlusMinus;
+            document.getElementById('minPlusMinus').textContent = minPlusMinus;
+            document.getElementById('maxPlusMinus').textContent = maxPlusMinus;
+            document.getElementById('avgPlusMinus').textContent = avgPlusMinus;
+            document.getElementById('totalBlockedShots').textContent = totalBlockedShots;
+            document.getElementById('minBlockedShots').textContent = minBlockedShots;
+            document.getElementById('maxBlockedShots').textContent = maxBlockedShots;
+            document.getElementById('avgBlockedShots').textContent = avgBlockedShots;
+            document.getElementById('totalHitsDelivered').textContent = totalHitsDelivered;
+            document.getElementById('totalHitsReceived').textContent = totalHitsReceived;
+            document.getElementById('avgTimeOnIce').textContent = avgToiDisplay;
+            document.getElementById('totalAssists').textContent = totalAssists;
+            document.getElementById('totalPoints').textContent = totalPoints;
+            document.getElementById('minPoints').textContent = minPoints;
+            document.getElementById('maxPoints').textContent = maxPoints;
+            document.getElementById('avgPoints').textContent = avgPoints;
+            document.getElementById('avgIndex').textContent = avgIndex;
+            document.getElementById('minIndex').textContent = minIndex;
+            document.getElementById('maxIndex').textContent = maxIndex;
+            document.getElementById('shotAccuracy').textContent = shotAccuracy + '%';
+
+            // Chart 1: InStat Index
+            chartInstances.index = new Chart(document.getElementById('indexChart'), {
+                type: 'line',
+                data: {
+                    labels: data.map(g => g.opponent),
+                    datasets: [{
+                        label: 'InStat Index',
+                        data: data.map(g => g.index),
+                        borderColor: '#667eea',
+                        backgroundColor: 'rgba(102, 126, 234, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { display: false } }
                 }
-            }
-        });
+            });
 
-        // Chart 3: Time on Ice
-        chartInstances.time = new Chart(document.getElementById('timeChart'), {
-            type: 'bar',
-            data: {
-                labels: data.map(g => g.opponent),
-                datasets: [{
-                    label: 'Minutes',
-                    data: data.map(g => timeToMinutes(g.toi)),
-                    backgroundColor: '#f59e0b'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: { legend: { display: false } },
-                scales: { y: { beginAtZero: true } }
-            }
-        });
+            // Chart 2: Points Distribution
+            chartInstances.points = new Chart(document.getElementById('pointsChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.map(g => g.opponent),
+                    datasets: [{
+                        label: 'Goals',
+                        data: data.map(g => g.goals),
+                        backgroundColor: '#4ade80'
+                    }, {
+                        label: 'Assists',
+                        data: data.map(g => g.assists),
+                        backgroundColor: '#60a5fa'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, beginAtZero: true }
+                    }
+                }
+            });
 
-        // Chart 4: Plus/Minus
-        chartInstances.plusMinus = new Chart(document.getElementById('plusMinusChart'), {
-            type: 'line',
-            data: {
-                labels: data.map(g => g.opponent),
-                datasets: [{
-                    label: '+/-',
-                    data: data.map(g => g.plusMinus),
-                    borderColor: '#ec4899',
-                    backgroundColor: 'rgba(236, 72, 153, 0.1)',
-                    tension: 0.4,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: { legend: { display: false } },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: function(context) {
-                                return context.tick.value === 0 ? '#000' : 'rgba(0, 0, 0, 0.1)';
+            // Chart 3: Time on Ice
+            chartInstances.time = new Chart(document.getElementById('timeChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.map(g => g.opponent),
+                    datasets: [{
+                        label: 'Minutes',
+                        data: data.map(g => timeToMinutes(g.toi)),
+                        backgroundColor: '#f59e0b'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Chart 4: Plus/Minus
+            chartInstances.plusMinus = new Chart(document.getElementById('plusMinusChart'), {
+                type: 'line',
+                data: {
+                    labels: data.map(g => g.opponent),
+                    datasets: [{
+                        label: '+/-',
+                        data: data.map(g => g.plusMinus),
+                        borderColor: '#ec4899',
+                        backgroundColor: 'rgba(236, 72, 153, 0.1)',
+                        tension: 0.4,
+                        fill: true
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { 
+                            beginAtZero: true,
+                            grid: {
+                                color: function(context) {
+                                    return context.tick.value === 0 ? '#000' : 'rgba(0, 0, 0, 0.1)';
+                                }
                             }
                         }
                     }
                 }
-            }
-        });
+            });
 
-        // Chart 5: Shots Analysis
-        chartInstances.shots = new Chart(document.getElementById('shotsChart'), {
-            type: 'bar',
-            data: {
-                labels: data.map(g => g.opponent),
-                datasets: [{
-                    label: 'Total Shots',
-                    data: data.map(g => g.shots),
-                    backgroundColor: 'rgba(139, 92, 246, 0.5)',
-                    borderColor: '#8b5cf6',
-                    borderWidth: 2
-                }, {
-                    label: 'Shots on Goal',
-                    data: data.map(g => g.sog),
-                    backgroundColor: '#8b5cf6'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                scales: { y: { beginAtZero: true } }
-            }
-        });
-
-        // Chart 6: Special Teams Time
-        chartInstances.specialTeams = new Chart(document.getElementById('specialTeamsChart'), {
-            type: 'bar',
-            data: {
-                labels: data.map(g => g.opponent),
-                datasets: [{
-                    label: 'Power Play (min)',
-                    data: data.map(g => timeToMinutes(g.pp)),
-                    backgroundColor: '#10b981'
-                }, {
-                    label: 'Short Handed (min)',
-                    data: data.map(g => timeToMinutes(g.sh)),
-                    backgroundColor: '#ef4444'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                scales: { y: { beginAtZero: true } }
-            }
-        });
-
-        // Chart 7: Corsi Events
-        chartInstances.corsi = new Chart(document.getElementById('corsiChart'), {
-            type: 'bar',
-            data: {
-                labels: data.map(g => g.opponent),
-                datasets: [{
-                    label: 'Total Corsi',
-                    data: data.map(g => g.corsiPlus - g.corsiMinus),
-                    backgroundColor: 'rgba(139, 92, 246, 0.5)',
-                    borderColor: '#8b5cf6',
-                    borderWidth: 2
-                }, {
-                    label: 'Corsi For',
-                    data: data.map(g => g.corsiPlus),
-                    backgroundColor: '#22c55e'
-                }, {
-                    label: 'Corsi Against',
-                    data: data.map(g => g.corsiMinus),
-                    backgroundColor: '#ef4444'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                scales: { y: { beginAtZero: true } }
-            }
-        });
-
-        // Chart 8: Physical Play
-        chartInstances.physical = new Chart(document.getElementById('physicalChart'), {
-            type: 'bar',
-            data: {
-                labels: data.map(g => g.opponent),
-                datasets: [{
-                    label: 'Hits Delivered',
-                    data: data.map(g => g.hits),
-                    backgroundColor: '#3b82f6'
-                }, {
-                    label: 'Hits Received',
-                    data: data.map(g => g.hitsAgainst),
-                    backgroundColor: '#f97316'
-                }, {
-                    label: 'Blocked Shots',
-                    data: data.map(g => g.blocks),
-                    backgroundColor: '#8b5cf6'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                scales: { y: { beginAtZero: true } }
-            }
-        });
-
-        document.getElementById('dashboard').classList.add('active');
-    }
-
-    function handleFileUpload(event) {
-        const file = event.target.files[0];
-        const errorDiv = document.getElementById('errorMessage');
-        const fileNameSpan = document.getElementById('fileName');
-
-        errorDiv.style.display = 'none';
-
-        if (!file) return;
-
-        fileNameSpan.textContent = file.name;
-
-        Papa.parse(file, {
-            header: true,
-            dynamicTyping: false,
-            skipEmptyLines: true,
-            complete: function(results) {
-                try {
-                    if (results.data.length === 0) {
-                        throw new Error('CSV file is empty');
-                    }
-
-                    const parsedData = parseCSVData(results.data);
-                    renderDashboard(parsedData);
-                } catch (error) {
-                    errorDiv.textContent = 'Error parsing CSV: ' + error.message;
-                    errorDiv.style.display = 'block';
-                    console.error('Parse error:', error);
+            // Chart 5: Shots Analysis
+            chartInstances.shots = new Chart(document.getElementById('shotsChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.map(g => g.opponent),
+                    datasets: [{
+                        label: 'Total Shots',
+                        data: data.map(g => g.shots),
+                        backgroundColor: 'rgba(139, 92, 246, 0.5)',
+                        borderColor: '#8b5cf6',
+                        borderWidth: 2
+                    }, {
+                        label: 'Shots on Goal',
+                        data: data.map(g => g.sog),
+                        backgroundColor: '#8b5cf6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: { y: { beginAtZero: true } }
                 }
-            },
-            error: function(error) {
-                errorDiv.textContent = 'Error reading file: ' + error.message;
-                errorDiv.style.display = 'block';
-                console.error('File error:', error);
+            });
+
+            // Chart 6: Special Teams Time
+            chartInstances.specialTeams = new Chart(document.getElementById('specialTeamsChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.map(g => g.opponent),
+                    datasets: [{
+                        label: 'Power Play (min)',
+                        data: data.map(g => timeToMinutes(g.pp)),
+                        backgroundColor: '#10b981'
+                    }, {
+                        label: 'Short Handed (min)',
+                        data: data.map(g => timeToMinutes(g.sh)),
+                        backgroundColor: '#ef4444'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Chart 7: Corsi Events
+            chartInstances.corsi = new Chart(document.getElementById('corsiChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.map(g => g.opponent),
+                    datasets: [{
+                        label: 'Total Corsi',
+                        data: data.map(g => g.corsiPlus - g.corsiMinus),
+                        backgroundColor: 'rgba(139, 92, 246, 0.5)',
+                        borderColor: '#8b5cf6',
+                        borderWidth: 2
+                    }, {
+                        label: 'Corsi For',
+                        data: data.map(g => g.corsiPlus),
+                        backgroundColor: '#22c55e'
+                    }, {
+                        label: 'Corsi Against',
+                        data: data.map(g => g.corsiMinus),
+                        backgroundColor: '#ef4444'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            // Chart 8: Physical Play
+            chartInstances.physical = new Chart(document.getElementById('physicalChart'), {
+                type: 'bar',
+                data: {
+                    labels: data.map(g => g.opponent),
+                    datasets: [{
+                        label: 'Hits Delivered',
+                        data: data.map(g => g.hits),
+                        backgroundColor: '#3b82f6'
+                    }, {
+                        label: 'Hits Received',
+                        data: data.map(g => g.hitsAgainst),
+                        backgroundColor: '#f97316'
+                    }, {
+                        label: 'Blocked Shots',
+                        data: data.map(g => g.blocks),
+                        backgroundColor: '#8b5cf6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+
+            document.getElementById('dashboard').classList.add('active');
+        }
+
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            const errorDiv = document.getElementById('errorMessage');
+            const fileNameSpan = document.getElementById('fileName');
+
+            errorDiv.style.display = 'none';
+            
+            if (!file) return;
+
+            fileNameSpan.textContent = file.name;
+
+            Papa.parse(file, {
+                header: true,
+                dynamicTyping: false,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    try {
+                        if (results.data.length === 0) {
+                            throw new Error('CSV file is empty');
+                        }
+
+                        const parsedData = parseCSVData(results.data);
+                        renderDashboard(parsedData);
+                    } catch (error) {
+                        errorDiv.textContent = 'Error parsing CSV: ' + error.message;
+                        errorDiv.style.display = 'block';
+                        console.error('Parse error:', error);
+                    }
+                },
+                error: function(error) {
+                    errorDiv.textContent = 'Error reading file: ' + error.message;
+                    errorDiv.style.display = 'block';
+                    console.error('File error:', error);
+                }
+            });
+        }
+
+        // Automatically load output.csv if it exists in the same directory
+        // Note: This only works when served from a web server (http://), not when opened directly (file://)
+        // For local file system use, please use the file upload button above
+        window.addEventListener('DOMContentLoaded', function() {
+            // Check if we're running on a web server
+            if (window.location.protocol === 'file:') {
+                console.log('Running from file system. Auto-load not available due to browser security restrictions.');
+                console.log('Please use the file upload button or serve this file from a local web server.');
+                return;
             }
+
+            fetch('output.csv')
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    }
+                    throw new Error('output.csv not found');
+                })
+                .then(csvText => {
+                    const fileNameSpan = document.getElementById('fileName');
+                    fileNameSpan.textContent = 'output.csv (auto-loaded)';
+                    
+                    Papa.parse(csvText, {
+                        header: true,
+                        dynamicTyping: false,
+                        skipEmptyLines: true,
+                        complete: function(results) {
+                            try {
+                                if (results.data.length === 0) {
+                                    throw new Error('CSV file is empty');
+                                }
+
+                                const parsedData = parseCSVData(results.data);
+                                renderDashboard(parsedData);
+                            } catch (error) {
+                                console.error('Auto-load parse error:', error);
+                            }
+                        },
+                        error: function(error) {
+                            console.error('Auto-load error:', error);
+                        }
+                    });
+                })
+                .catch(error => {
+                    // Silently fail if output.csv doesn't exist - user can still upload manually
+                    console.log('output.csv not found, waiting for manual upload');
+                });
         });
-    }
-</script>
+    </script>
 </body>
 </html>
