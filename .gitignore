@@ -19,3 +19,5 @@ Build/
 /.idea/*
 /Tools/OfficeDocToPdfConverter/.paket/paket.bootstrapper.exe
 TestResults/
+CsvOutput/output.csv
+CsvOutput/Dashboard.html

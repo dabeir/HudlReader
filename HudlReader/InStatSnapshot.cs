@@ -9,9 +9,10 @@ using UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor;
 namespace HudlReader;
 
 public class InStatSnapshot(
-    string reportName, 
-    DateTime reportDate, 
-    string teamName, 
+    string reportName,
+    DateTime reportDate,
+    string teamName,
+    string opponentName,
     string playerName,
     int playerJerseyNumber,
     int inStatIndex,
@@ -43,10 +44,11 @@ public class InStatSnapshot(
     decimal teamXGoalsWhenOnIce,
     decimal opponentsXGoalsWhenOnIce)
 {
-    
+
     public string ReportName { get; } = reportName;
     public DateTime ReportDate { get; } = reportDate;
-    public string TeamName { get;} = teamName;
+    public string TeamName { get; } = teamName;
+    public string OpponentName { get; } = opponentName;
     public string PlayerName { get; } = playerName;
     public int PlayerJerseyNumber { get; } = playerJerseyNumber;
     public int InStatIndex { get; } = inStatIndex;
@@ -58,10 +60,6 @@ public class InStatSnapshot(
     public int Shifts { get; } = shifts;
     public TimeSpan AverageShift { get; } = averageShift;
     public TimeSpan PowerPlayTime { get; } = powerPlayTime;
-    // public int PowerPlayGoals { get; } = powerPlayGoals;
-    // public int PowerPlayAssists { get; } = powerPlayAssists;
-    // public int PowerPlayPoints { get; } = powerPlayPoints;
-    // public int PowerPlayPlusMinus { get; } = powerPlayPlusMinus;
     public TimeSpan ShortHandedTime { get; } = shortHandedTime;
     public TimeSpan PenaltyMinutes { get; } = penaltyMinutes;
     public int Shots { get; } = shots;
@@ -81,13 +79,13 @@ public class InStatSnapshot(
     public decimal XGoalsGoals { get; } = xGoalsPerGoal;
     public decimal TeamXGoalsWhenOnIce { get; } = teamXGoalsWhenOnIce;
     public decimal OpponentsXGoalsWhenOnIce { get; } = opponentsXGoalsWhenOnIce;
-    
+
     public static bool TryParse(string pdfFile, out InStatSnapshot? inStatSnapshot)
     {
         try
         {
             HudlReport.TryParse(pdfFile, out HudlReport? hudlReport);
-            
+
             // Parse Page 1 of the InStat PDF
             using PdfDocument document = PdfDocument.Open(pdfFile);
             Page page1 = document.GetPage(1);
@@ -98,11 +96,14 @@ public class InStatSnapshot(
             // Parse the date using a custom date time format
             DateTime reportDate = DateTime.ParseExact(splitLines[2], "dd.MM.yyyy", CultureInfo.InvariantCulture);
             string teamName = splitLines[3];
-            
+
+            // Opponent name
+            string opponentName = reportName.Split(':').FirstOrDefault(s => !s.Contains(teamName)) ?? string.Empty;
+
             // Parse page 2 of the InStat PDF
             Page page2 = document.GetPage(2);
             string pageTwoText = ContentOrderTextExtractor.GetText(page2);
-            
+
             int index = ParseInStatIndex(pageTwoText);
             int goals = ParseIntValue(pageTwoText, @"Goals\s+([—\-]|\d+\.?\d*)");
             int assists = ParseIntValue(pageTwoText, @"Assists\s+([—\-]|\d+\.?\d*)");
@@ -114,10 +115,11 @@ public class InStatSnapshot(
             TimeSpan powerPlayTime = ParseTimeValue(pageTwoText, @"Power play time\s+(\d{1,2}:\d{2})");
             TimeSpan shortHandedTime = ParseTimeValue(pageTwoText, @"Short-handed time\s+(\d{1,2}:\d{2})");
             TimeSpan penaltyMinutes = ParsePenaltyTime(pageTwoText);
-            
+
             (int playerJerseyNumber, string playerName) = ParsePlayerInfo(pageTwoText);
             (int shots, int onGoal, int onGoalPercentage) = ParseShotsOnGoal(pageTwoText);
-            (int powerPlayShots, int powerPlayShotsOnGoal, int powerPlayShotsOnGoalPercentage) = ParsePowerPlayShotsOnGoal(pageTwoText);
+            (int powerPlayShots, int powerPlayShotsOnGoal, int powerPlayShotsOnGoalPercentage) =
+                ParsePowerPlayShotsOnGoal(pageTwoText);
 
             int corsi = ParseIntValue(pageTwoText, @"CORSI\s+(\d+)");
             int corsiPlus = ParseIntValue(pageTwoText, @"CORSI\+\s+(\d+)");
@@ -125,18 +127,20 @@ public class InStatSnapshot(
             int hitsDelivered = ParseIntValue(pageTwoText, @"Hits\s+([—\-]|\d+\.?\d*)");
             int hitsAgainst = ParseIntValue(pageTwoText, @"Hits against\s+([—\-]|\d+\.?\d*)");
             int blockedShots = ParseIntValue(pageTwoText, @"Blocked shots\s+(\d+\.?\d*)");
-            
+
             // Expected goals
             decimal xGoals = ParseDecimalValue(pageTwoText, @"xG\s+(\d+\.?\d*)");
             decimal xGoalsShots = ParseDecimalValue(pageTwoText, @"xG / shots\s+([—\-]|\d+\.?\d*)");
             decimal xGoalsGoals = ParseDecimalValue(pageTwoText, @"xG / goals\s+([—\-]|\d+\.?\d*)");
             decimal teamXGoalsWhenOnIce = ParseDecimalValue(pageTwoText, @"Team xG when on ice\s+(\d+\.?\d*)");
-            decimal opponentsXGoalsWhenOnIce = ParseDecimalValue(pageTwoText, @"Opponent's xG when on ice\s+(\d+\.?\d*)");
-            
+            decimal opponentsXGoalsWhenOnIce =
+                ParseDecimalValue(pageTwoText, @"Opponent's xG when on ice\s+(\d+\.?\d*)");
+
             inStatSnapshot = new InStatSnapshot(
-                reportName, 
-                reportDate, 
-                teamName, 
+                reportName,
+                reportDate,
+                teamName,
+                opponentName,
                 playerName,
                 playerJerseyNumber,
                 index,
@@ -168,7 +172,7 @@ public class InStatSnapshot(
                 teamXGoalsWhenOnIce,
                 opponentsXGoalsWhenOnIce
             );
-            
+
             return true;
         }
         catch (Exception e)
@@ -178,12 +182,12 @@ public class InStatSnapshot(
             return false;
         }
     }
-    
+
     private static (int number, string name) ParsePlayerInfo(string text)
     {
         // Split by lines and find the line before "Season average"
         string[] lines = text.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-    
+
         for (int i = 0; i < lines.Length - 1; i++)
         {
             if (lines[i + 1].Trim().StartsWith("Season average", StringComparison.OrdinalIgnoreCase))
@@ -192,7 +196,7 @@ public class InStatSnapshot(
                 string playerLine = lines[i].Trim();
                 string pattern = @"^(\d+)\s+(.+)$";
                 Match match = Regex.Match(playerLine, pattern);
-            
+
                 if (match.Success)
                 {
                     int number = int.Parse(match.Groups[1].Value);
@@ -201,10 +205,10 @@ public class InStatSnapshot(
                 }
             }
         }
-    
+
         return (0, string.Empty);
     }
-    
+
     // Helper method to parse InStat Index (first value)
     private static int ParseInStatIndex(string text)
     {
@@ -212,13 +216,13 @@ public class InStatSnapshot(
         Match match = Regex.Match(text, pattern);
         return match.Success ? int.Parse(match.Groups[1].Value) : 0;
     }
-    
+
     // Helper method to parse integer values (first column value)
     private static int ParseIntValue(string text, string pattern)
     {
         return (int)Math.Round(ParseDecimalValue(text, pattern));
     }
-    
+
     // Helper method to parse decimal values
     private static decimal ParseDecimalValue(string text, string pattern)
     {
@@ -231,12 +235,14 @@ public class InStatSnapshot(
             {
                 return 0;
             }
+
             // Handle decimal values
             return decimal.Parse(value);
         }
+
         return 0;
     }
-    
+
     // Helper method to parse Plus Minus (can be negative, first value)
     private static int ParsePlusMinus(string text)
     {
@@ -246,9 +252,10 @@ public class InStatSnapshot(
         {
             return (int)Math.Round(decimal.Parse(match.Groups[1].Value));
         }
+
         return 0;
     }
-    
+
     // Helper method to parse time values (first column value)
     private static TimeSpan ParseTimeValue(string text, string pattern)
     {
@@ -258,9 +265,10 @@ public class InStatSnapshot(
             string[] timeParts = match.Groups[1].Value.Split(':');
             return new TimeSpan(0, int.Parse(timeParts[0]), int.Parse(timeParts[1]));
         }
+
         return TimeSpan.Zero;
     }
-    
+
     // Helper method to parse penalty time (handles dash in first column)
     private static TimeSpan ParsePenaltyTime(string text)
     {
@@ -274,12 +282,14 @@ public class InStatSnapshot(
             {
                 return TimeSpan.Zero;
             }
+
             string[] timeParts = value.Split(':');
             return new TimeSpan(0, int.Parse(timeParts[0]), int.Parse(timeParts[1]));
         }
+
         return TimeSpan.Zero;
     }
-    
+
     // Helper method to parse shots on goal with 3 distinct values
     // Example: "Shots / on goal 5/3 60% 1.5/1 67%" returns (5, 3, 60)
     private static (int shots, int onGoal, int percentage) ParseShotsOnGoal(string text)
@@ -293,9 +303,10 @@ public class InStatSnapshot(
             int percentage = int.Parse(match.Groups[3].Value);
             return (shots, onGoal, percentage);
         }
+
         return (0, 0, 0);
     }
-    
+
     // Helper method to parse shots on goal with 3 distinct values
     // Example: "Shots / on goal 5/3 60% 1.5/1 67%" returns (5, 3, 60)
     private static (int shots, int onGoal, int percentage) ParsePowerPlayShotsOnGoal(string text)
@@ -309,16 +320,18 @@ public class InStatSnapshot(
             int percentage = int.Parse(match.Groups[3].Value);
             return (shots, onGoal, percentage);
         }
+
         return (0, 0, 0);
     }
-    
+
     public override string ToString()
     {
         StringBuilder sb = new();
-        
+
         sb.AppendLine($"Report Name: {this.ReportName}");
         sb.AppendLine($"Report Date: {this.ReportDate:d}");
         sb.AppendLine($"Team Name: {this.TeamName}");
+        sb.AppendLine($"Opponent Name: {this.OpponentName}");
         sb.AppendLine($"Player Name: {this.PlayerName}");
         sb.AppendLine($"Player Number: {this.PlayerJerseyNumber}");
         sb.AppendLine($"InStat Index: {this.InStatIndex}");
@@ -338,7 +351,9 @@ public class InStatSnapshot(
         sb.AppendLine($"Power Play Shots: {this.PowerPlayShots}");
         sb.AppendLine($"Power Play Shots On Goal: {this.PowerPlayShotsOnGoal}");
         sb.AppendLine($"Power Play Shots On Goal Percentage: {this.PowerPlayShotsOnGoalPercentage}%");
-        sb.AppendLine($"CORSI: {this.Corsi}");
+        sb.AppendLine($"Corsi: {this.Corsi}");
+        sb.AppendLine($"CorsiPlus: {this.CorsiPlus}");
+        sb.AppendLine($"CorsiMinus: {this.CorsiMinus}");
         sb.AppendLine($"Hits Delivered: {this.HitsDelivered}");
         sb.AppendLine($"Hits Against: {this.HitsAgainst}");
         sb.AppendLine($"Blocked Shots: {this.BlockedShots}");

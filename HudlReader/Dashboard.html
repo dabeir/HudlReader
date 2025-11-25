@@ -198,32 +198,126 @@
                     <div class="stat-value" id="totalGames">0</div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Total Goals</div>
-                    <div class="stat-value" id="totalGoals">0</div>
+                    <div class="stat-label">Goals/Assists</div>
+                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Goals</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #667eea;" id="totalGoals">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Assists</div>
+                            <div style="font-size: 28px; font-weight: bold; color: #667eea;" id="totalAssists">0</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Total Assists</div>
-                    <div class="stat-value" id="totalAssists">0</div>
+                    <div class="stat-label">Points</div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="minPoints">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="maxPoints">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="avgPoints">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Total</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="totalPoints">0</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="stat-card">
-                    <div class="stat-label">Total Points</div>
-                    <div class="stat-value" id="totalPoints">0</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label">Avg InStat Index</div>
-                    <div class="stat-value" id="avgIndex">0</div>
+                    <div class="stat-label">InStat Index</div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="minIndex">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="maxIndex">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="avgIndex">0</div>
+                        </div>
+                    </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Shot Accuracy</div>
                     <div class="stat-value" id="shotAccuracy">0%</div>
                 </div>
 				<div class="stat-card">
-                    <div class="stat-label">Total +/-</div>
-                    <div class="stat-value" id="totalPlusMinus">0</div>
+                    <div class="stat-label">Plus/Minus</div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="minPlusMinus">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="maxPlusMinus">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="avgPlusMinus">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Total</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="totalPlusMinus">0</div>
+                        </div>
+                    </div>
                 </div>
 				<div class="stat-card">
-                    <div class="stat-label">Total Blocked Shots</div>
-                    <div class="stat-value" id="totalBlockedShots">0</div>
+                    <div class="stat-label">Blocked Shots</div>
+                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="minBlockedShots">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="maxBlockedShots">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="avgBlockedShots">0</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Total</div>
+                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="totalBlockedShots">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Hits Delivered</div>
+                    <div class="stat-value" id="totalHitsDelivered">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Total Hits Received</div>
+                    <div class="stat-value" id="totalHitsReceived">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Time on Ice</div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="minTimeOnIce">0:00</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="maxTimeOnIce">0:00</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="avgTimeOnIce">0:00</div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -273,33 +367,75 @@
             return parseInt(parts[0]) * 60 + parseInt(parts[1]) + parseInt(parts[2]) / 60;
         }
 
-        function parseCSVData(csvData) {
-            return csvData.map(row => {
-                const opponent = row.ReportName ? row.ReportName.split(/\d+:/)[0].trim() : 'Unknown';
-                return {
-                    date: row.ReportDate,
-                    opponent: opponent.substring(0, 20),
-                    index: parseInt(row.InStatIndex) || 0,
-                    goals: parseInt(row.Goals) || 0,
-                    assists: parseInt(row.Assists) || 0,
-                    points: parseInt(row.Points) || 0,
-                    plusMinus: parseInt(row.PlusMinus) || 0,
-                    toi: row.TimeOnIce || "00:00:00",
-                    shots: parseInt(row.Shots) || 0,
-                    sog: parseInt(row.ShotsOnGoal) || 0,
-                    pp: row.PowerPlayTime || "00:00:00",
-                    sh: row.ShortHandedTime || "00:00:00",
-                    corsiPlus: parseInt(row.CorsiPlus) || 0,
-                    corsiMinus: parseInt(row.CorsiMinus) || 0,
-                    hits: parseInt(row.HitsDelivered) || 0,
-                    hitsAgainst: parseInt(row.HitsAgainst) || 0,
-                    blocks: parseInt(row.BlockedShots) || 0,
-                    playerName: row.PlayerName,
-                    teamName: row.TeamName,
-                    jerseyNumber: row.PlayerJerseyNumber
-                };
-            });
+        function minutesToDisplay(minutes) {
+            return Math.floor(minutes) + ':' + String(Math.round((minutes % 1) * 60)).padStart(2, '0');
         }
+
+        function calculateStats(data, field, isTime = false) {
+            const getValue = isTime ? (g) => timeToMinutes(g[field]) : (g) => g[field];
+            const values = data.map(getValue);
+            const total = values.reduce((sum, val) => sum + val, 0);
+            const min = Math.min(...values);
+            const max = Math.max(...values);
+            const minGame = data.find(g => getValue(g) === min);
+            const maxGame = data.find(g => getValue(g) === max);
+            
+            return {
+                total,
+                min: isTime ? minutesToDisplay(min) : min,
+                max: isTime ? minutesToDisplay(max) : max,
+                avg: isTime ? minutesToDisplay(total / data.length) : (total / data.length).toFixed(1),
+                minGame,
+                maxGame
+            };
+        }
+
+        function setStatValues(prefix, stats) {
+            const el = (id) => document.getElementById(id);
+            if (stats.total !== undefined && el(`total${prefix}`)) {
+                el(`total${prefix}`).textContent = stats.total;
+            }
+            if (stats.min !== undefined && el(`min${prefix}`)) {
+                el(`min${prefix}`).textContent = stats.min;
+                el(`min${prefix}`).title = 'vs ' + stats.minGame.opponent;
+            }
+            if (stats.max !== undefined && el(`max${prefix}`)) {
+                el(`max${prefix}`).textContent = stats.max;
+                el(`max${prefix}`).title = 'vs ' + stats.maxGame.opponent;
+            }
+            if (stats.avg !== undefined && el(`avg${prefix}`)) {
+                el(`avg${prefix}`).textContent = stats.avg;
+            }
+        }
+
+    function parseCSVData(csvData) {
+        return csvData.map(row => {
+            const opponent = row.OpponentName;
+            return {
+                date: row.ReportDate,
+                opponent: opponent.substring(0, 20),
+                index: parseInt(row.InStatIndex) || 0,
+                goals: parseInt(row.Goals) || 0,
+                assists: parseInt(row.Assists) || 0,
+                points: parseInt(row.Points) || 0,
+                plusMinus: parseInt(row.PlusMinus) || 0,
+                toi: row.TimeOnIce || "00:00:00",
+                shots: parseInt(row.Shots) || 0,
+                sog: parseInt(row.ShotsOnGoal) || 0,
+                pp: row.PowerPlayTime || "00:00:00",
+                sh: row.ShortHandedTime || "00:00:00",
+                corsiPlus: parseInt(row.CorsiPlus) || 0,
+                corsiMinus: parseInt(row.CorsiMinus) || 0,
+                hits: parseInt(row.HitsDelivered) || 0,
+                hitsAgainst: parseInt(row.HitsAgainst) || 0,
+                blocks: parseInt(row.BlockedShots) || 0,
+                playerName: row.PlayerName,
+                teamName: row.TeamName,
+				opponentName: row.OpponentName,
+                jerseyNumber: row.PlayerJerseyNumber
+            };
+        });
+    }
 
         function destroyCharts() {
             Object.values(chartInstances).forEach(chart => {
@@ -321,23 +457,36 @@
             // Calculate summary stats
             const totalGames = data.length;
             const totalGoals = data.reduce((sum, g) => sum + g.goals, 0);
-            const totalPlusMinus = data.reduce((sum, g) => sum + g.plusMinus, 0);
-            const totalBlockedShots = data.reduce((sum, g) => sum + g.blocks, 0);
             const totalAssists = data.reduce((sum, g) => sum + g.assists, 0);
-            const totalPoints = data.reduce((sum, g) => sum + g.points, 0);
-            const avgIndex = Math.round(data.reduce((sum, g) => sum + g.index, 0) / totalGames);
+            const totalHitsDelivered = data.reduce((sum, g) => sum + g.hits, 0);
+            const totalHitsReceived = data.reduce((sum, g) => sum + g.hitsAgainst, 0);
             const totalShots = data.reduce((sum, g) => sum + g.shots, 0);
             const totalSOG = data.reduce((sum, g) => sum + g.sog, 0);
             const shotAccuracy = totalShots > 0 ? Math.round((totalSOG / totalShots) * 100) : 0;
 
+            // Calculate stats with min/max/avg
+            const plusMinusStats = calculateStats(data, 'plusMinus');
+            const blockedShotsStats = calculateStats(data, 'blocks');
+            const pointsStats = calculateStats(data, 'points');
+            const toiStats = calculateStats(data, 'toi', true);
+            
+            // Index needs special handling for average (rounding instead of toFixed)
+            const indexStats = calculateStats(data, 'index');
+            indexStats.avg = Math.round(data.reduce((sum, g) => sum + g.index, 0) / totalGames);
+
+            // Set all stat values
             document.getElementById('totalGames').textContent = totalGames;
             document.getElementById('totalGoals').textContent = totalGoals;
-            document.getElementById('totalPlusMinus').textContent = totalPlusMinus;
-            document.getElementById('totalBlockedShots').textContent = totalBlockedShots;
             document.getElementById('totalAssists').textContent = totalAssists;
-            document.getElementById('totalPoints').textContent = totalPoints;
-            document.getElementById('avgIndex').textContent = avgIndex;
+            document.getElementById('totalHitsDelivered').textContent = totalHitsDelivered;
+            document.getElementById('totalHitsReceived').textContent = totalHitsReceived;
             document.getElementById('shotAccuracy').textContent = shotAccuracy + '%';
+            
+            setStatValues('PlusMinus', plusMinusStats);
+            setStatValues('BlockedShots', blockedShotsStats);
+            setStatValues('Points', pointsStats);
+            setStatValues('Index', indexStats);
+            setStatValues('TimeOnIce', toiStats);
 
             // Chart 1: InStat Index
             chartInstances.index = new Chart(document.getElementById('indexChart'), {
@@ -574,6 +723,55 @@
                 }
             });
         }
+
+        // Automatically load output.csv if it exists in the same directory
+        // Note: This only works when served from a web server (http://), not when opened directly (file://)
+        // For local file system use, please use the file upload button above
+        window.addEventListener('DOMContentLoaded', function() {
+            // Check if we're running on a web server
+            if (window.location.protocol === 'file:') {
+                console.log('Running from file system. Auto-load not available due to browser security restrictions.');
+                console.log('Please use the file upload button or serve this file from a local web server.');
+                return;
+            }
+
+            fetch('output.csv')
+                .then(response => {
+                    if (response.ok) {
+                        return response.text();
+                    }
+                    throw new Error('output.csv not found');
+                })
+                .then(csvText => {
+                    const fileNameSpan = document.getElementById('fileName');
+                    fileNameSpan.textContent = 'output.csv (auto-loaded)';
+                    
+                    Papa.parse(csvText, {
+                        header: true,
+                        dynamicTyping: false,
+                        skipEmptyLines: true,
+                        complete: function(results) {
+                            try {
+                                if (results.data.length === 0) {
+                                    throw new Error('CSV file is empty');
+                                }
+
+                                const parsedData = parseCSVData(results.data);
+                                renderDashboard(parsedData);
+                            } catch (error) {
+                                console.error('Auto-load parse error:', error);
+                            }
+                        },
+                        error: function(error) {
+                            console.error('Auto-load error:', error);
+                        }
+                    });
+                })
+                .catch(error => {
+                    // Silently fail if output.csv doesn't exist - user can still upload manually
+                    console.log('output.csv not found, waiting for manual upload');
+                });
+        });
     </script>
 </body>
 </html>
