@@ -1,8 +1,8 @@
 ﻿
 using System.CommandLine;
-using HudlReader;
+using HudlReader.Lib;
 
-Console.WriteLine("HudlReader");
+Console.WriteLine("HudlReader.Cli");
 
 Option<string> inputDirectoryOption = new Option<string>("--in")
 {
@@ -16,7 +16,7 @@ Option<string> outputDirectoryOption = new Option<string>("--out")
     // DefaultValueFactory = parseResult => ""
 };
 
-RootCommand rootCommand = new RootCommand("Enter command line parameters for the HudlReader");
+RootCommand rootCommand = new RootCommand("Enter command line parameters for the HudlReader.Cli");
 rootCommand.Options.Add(inputDirectoryOption);
 rootCommand.Options.Add(outputDirectoryOption);
 
@@ -33,8 +33,8 @@ rootCommand.SetAction(async parseResult =>
 
         if (!string.IsNullOrWhiteSpace(inputDirectory) && !string.IsNullOrWhiteSpace(outputDirectory))
         {
-            Parser parser = new(inputDirectory, outputDirectory);
-            await parser.Parse();
+            InStatParser parser = new(inputDirectory, outputDirectory);
+            await parser.ParsePlayerReports();
         }
     }
     catch (Exception e)

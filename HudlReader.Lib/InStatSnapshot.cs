@@ -1,4 +1,3 @@
-using System;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -6,7 +5,7 @@ using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
 using UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor;
 
-namespace HudlReader;
+namespace HudlReader.Lib;
 
 public class InStatSnapshot(
     string reportName,
@@ -84,8 +83,6 @@ public class InStatSnapshot(
     {
         try
         {
-            HudlReport.TryParse(pdfFile, out HudlReport? hudlReport);
-
             // Parse Page 1 of the InStat PDF
             using PdfDocument document = PdfDocument.Open(pdfFile);
             Page page1 = document.GetPage(1);

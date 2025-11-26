@@ -1,6 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HudlReader", "HudlReader\HudlReader.csproj", "{05314C5A-D56E-4EEB-89E3-142D1F7D41D4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HudlReader.Cli", "HudlReader.Cli\HudlReader.Cli.csproj", "{05314C5A-D56E-4EEB-89E3-142D1F7D41D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HudlReader.UI", "HudlReader.UI\HudlReader.UI.csproj", "{B5ABD0F6-4F74-4A86-B7B4-AA1C0F80388A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HudlReader.Lib", "HudlReader.Lib\HudlReader.Lib.csproj", "{46EAA4F8-78D2-4A09-ABA6-AAC242D5E5B3}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -12,5 +16,13 @@ Global
 		{05314C5A-D56E-4EEB-89E3-142D1F7D41D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{05314C5A-D56E-4EEB-89E3-142D1F7D41D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{05314C5A-D56E-4EEB-89E3-142D1F7D41D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5ABD0F6-4F74-4A86-B7B4-AA1C0F80388A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5ABD0F6-4F74-4A86-B7B4-AA1C0F80388A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5ABD0F6-4F74-4A86-B7B4-AA1C0F80388A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5ABD0F6-4F74-4A86-B7B4-AA1C0F80388A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46EAA4F8-78D2-4A09-ABA6-AAC242D5E5B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46EAA4F8-78D2-4A09-ABA6-AAC242D5E5B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46EAA4F8-78D2-4A09-ABA6-AAC242D5E5B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46EAA4F8-78D2-4A09-ABA6-AAC242D5E5B3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
