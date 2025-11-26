@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using Avalonia.Threading;
@@ -42,27 +43,37 @@ public partial class MainWindowViewModel : ViewModelBase
         if (string.IsNullOrEmpty(this.InputFolder) || string.IsNullOrEmpty(this.OutputFolder))
         {
             // TODO: Show validation message
-
             return Task.CompletedTask;
         }
     
+        // Copy the dashboard file to the output folder
+        string dashboardFilename = "Dashboard.html";
+        this.CopyResourceFile(dashboardFilename, Path.Combine(this.OutputFolder, dashboardFilename));
+        
+        // Start parsing on a background thread
         Task task = Task.Run(async () =>
         {
             InStatParser parser = new(this.InputFolder, this.OutputFolder, i =>
             {
+                // Update the progress bar on the UI thread 
                 Dispatcher.UIThread.InvokeAsync(() => { this.Progress = i; });
-                //Dispatcher.UIThread.Post(() => { this.Progress = i; });
             });
             
             await parser.ParsePlayerReports();
         });
-
+        
         return task;
     }
 
-    // private Task CopyResourceFile(string resourceName)
-    // {
-    //     var assembly = typeof(MyLibrary.MyClass).GetTypeInfo().Assembly;
-    //     Stream resource = assembly.GetManifestResourceStream(resourceName);
-    // }
+    private void CopyResourceFile(string resourceFileName, string outputPath)
+    {
+        Assembly assembly = typeof(InStatParser).GetTypeInfo().Assembly;
+
+        string resourceName = assembly.GetManifestResourceNames()
+            .Single(str => str.EndsWith(resourceFileName));
+        
+        using Stream? stream = assembly.GetManifestResourceStream(resourceName);
+        using Stream s = File.Create(outputPath);
+        stream?.CopyTo(s);
+    }
 }

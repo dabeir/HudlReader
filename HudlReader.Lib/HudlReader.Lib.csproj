@@ -17,7 +17,7 @@
 
     <ItemGroup>
       <None Remove="Web\Dashboard.html" />
-      <Resource Include="Web\Dashboard.html" />
+      <EmbeddedResource Include="Web\Dashboard.html" />
     </ItemGroup>
 
 </Project>

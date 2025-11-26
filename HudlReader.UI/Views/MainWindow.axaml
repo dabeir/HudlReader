@@ -11,7 +11,7 @@
         x:Class="HudlReader.UI.Views.MainWindow"
         WindowStartupLocation="CenterScreen"
         x:DataType="vm:MainWindowViewModel"
-        Title="HudlReader.Cli.UI">
+        Title="HudlReader">
     
     <StackPanel Margin="20" Spacing="15">
         
@@ -22,7 +22,7 @@
                 <TextBox Grid.Column="0" 
                          Text="{Binding InputFolder, Mode=TwoWay}" 
                          IsReadOnly="True"
-                         Watermark="Select output folder..."/>
+                         Watermark="Select input folder..."/>
                 <Button Grid.Column="1" 
                         Name="InputFolderButton"
                         Content="Browse..." 
@@ -59,9 +59,12 @@
         </StackPanel>
 
         <!-- Start Button -->
-        <Button Content="Start Processing" 
+        <Button Content="Parse Data" 
                 Command="{Binding StartProcessingCommand}"
                 HorizontalAlignment="Center"
+                HorizontalContentAlignment="Center"
+                VerticalAlignment="Center"
+                VerticalContentAlignment="Center"
                 Width="150"
                 Height="35"
                 Margin="0,10,0,0"/>
