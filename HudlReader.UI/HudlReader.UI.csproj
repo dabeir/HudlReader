@@ -24,7 +24,6 @@
             <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
         </PackageReference>
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
-        <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3595.46" />
     </ItemGroup>
 
     <ItemGroup>
