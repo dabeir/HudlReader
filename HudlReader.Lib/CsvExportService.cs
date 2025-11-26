@@ -2,7 +2,7 @@ using System.Globalization;
 using CsvHelper;
 using CsvHelper.Configuration;
 
-namespace HudlReader;
+namespace HudlReader.Lib;
 
 public class CsvExportService
 {

@@ -1,4 +1,4 @@
-namespace HudlReader;
+namespace HudlReader.Lib;
 
 public class Parser(string inputDirectory, string csvOutputDirectory)
 {

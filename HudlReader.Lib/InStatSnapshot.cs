@@ -5,7 +5,7 @@ using UglyToad.PdfPig;
 using UglyToad.PdfPig.Content;
 using UglyToad.PdfPig.DocumentLayoutAnalysis.TextExtractor;
 
-namespace HudlReader;
+namespace HudlReader.Lib;
 
 public class InStatSnapshot(
     string reportName,

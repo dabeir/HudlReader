@@ -11,7 +11,7 @@
         x:Class="HudlReader.UI.Views.MainWindow"
         WindowStartupLocation="CenterScreen"
         x:DataType="vm:MainWindowViewModel"
-        Title="HudlReader.UI">
+        Title="HudlReader.Cli.UI">
     
     <StackPanel Margin="20" Spacing="15">
         
