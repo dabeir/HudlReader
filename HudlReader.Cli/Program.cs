@@ -33,8 +33,8 @@ rootCommand.SetAction(async parseResult =>
 
         if (!string.IsNullOrWhiteSpace(inputDirectory) && !string.IsNullOrWhiteSpace(outputDirectory))
         {
-            Parser parser = new(inputDirectory, outputDirectory);
-            await parser.Parse();
+            InStatParser parser = new(inputDirectory, outputDirectory);
+            await parser.ParsePlayerReports();
         }
     }
     catch (Exception e)

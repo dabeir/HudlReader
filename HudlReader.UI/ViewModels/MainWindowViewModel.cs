@@ -1,7 +1,11 @@
 ﻿using System;
+using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HudlReader.Lib;
 
 namespace HudlReader.UI.ViewModels;
 
@@ -33,22 +37,32 @@ public partial class MainWindowViewModel : ViewModelBase
     }
     
     [RelayCommand]
-    private async Task StartProcessing()
+    private Task StartProcessing()
     {
         if (string.IsNullOrEmpty(this.InputFolder) || string.IsNullOrEmpty(this.OutputFolder))
         {
             // TODO: Show validation message
-            
-            return;
+
+            return Task.CompletedTask;
         }
     
-        // TODO: Implement your processing logic here
-        
-        // Simulating progress for now
-        for (int i = 0; i <= 100; i += 10)
+        Task task = Task.Run(async () =>
         {
-            this.Progress = i;
-            await Task.Delay(200);
-        }
+            InStatParser parser = new(this.InputFolder, this.OutputFolder, i =>
+            {
+                Dispatcher.UIThread.InvokeAsync(() => { this.Progress = i; });
+                //Dispatcher.UIThread.Post(() => { this.Progress = i; });
+            });
+            
+            await parser.ParsePlayerReports();
+        });
+
+        return task;
     }
+
+    // private Task CopyResourceFile(string resourceName)
+    // {
+    //     var assembly = typeof(MyLibrary.MyClass).GetTypeInfo().Assembly;
+    //     Stream resource = assembly.GetManifestResourceStream(resourceName);
+    // }
 }
