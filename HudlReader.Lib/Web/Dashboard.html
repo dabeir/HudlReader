@@ -319,6 +319,23 @@
                         </div>
                     </div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-label">Shift Duration</div>
+                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="minShiftDuration">0:00</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="maxShiftDuration">0:00</div>
+                        </div>
+                        <div style="text-align: center;">
+                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
+                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="avgShiftDuration">0:00</div>
+                        </div>
+                    </div>
+                </div>
             </div>
 
             <div class="charts-grid">
@@ -413,6 +430,7 @@
             const opponent = row.OpponentName;
             return {
                 date: row.ReportDate,
+                averageShift: row.AverageShift || "00:00:00",
                 opponent: opponent.substring(0, 20),
                 index: parseInt(row.InStatIndex) || 0,
                 goals: parseInt(row.Goals) || 0,
@@ -469,6 +487,7 @@
             const blockedShotsStats = calculateStats(data, 'blocks');
             const pointsStats = calculateStats(data, 'points');
             const toiStats = calculateStats(data, 'toi', true);
+            const shiftDurationStats = calculateStats(data, 'averageShift', true);
             
             // Index needs special handling for average (rounding instead of toFixed)
             const indexStats = calculateStats(data, 'index');
@@ -487,6 +506,7 @@
             setStatValues('Points', pointsStats);
             setStatValues('Index', indexStats);
             setStatValues('TimeOnIce', toiStats);
+            setStatValues('ShiftDuration', shiftDurationStats);
 
             // Chart 1: InStat Index
             chartInstances.index = new Chart(document.getElementById('indexChart'), {
