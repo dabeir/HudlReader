@@ -124,6 +124,63 @@
             letter-spacing: 1px;
         }
 
+        /* Optimized: Reusable stat card sub-grid layouts */
+        .stat-sub-grid-2 {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .stat-sub-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .stat-sub-grid-4 {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .stat-sub-item {
+            text-align: center;
+        }
+
+        .stat-sub-label {
+            font-size: 10px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .stat-sub-label-lg {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+        }
+
+        .stat-sub-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-sub-value-lg {
+            font-size: 28px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-sub-value-time {
+            font-size: 20px;
+            font-weight: bold;
+            color: #667eea;
+        }
+
         .charts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(800px, 1fr));
@@ -199,52 +256,52 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Goals/Assists</div>
-                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Goals</div>
-                            <div style="font-size: 28px; font-weight: bold; color: #667eea;" id="totalGoals">0</div>
+                    <div class="stat-sub-grid-2">
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label-lg">Goals</div>
+                            <div class="stat-sub-value-lg" id="totalGoals">0</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Assists</div>
-                            <div style="font-size: 28px; font-weight: bold; color: #667eea;" id="totalAssists">0</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label-lg">Assists</div>
+                            <div class="stat-sub-value-lg" id="totalAssists">0</div>
                         </div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Points</div>
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="minPoints">0</div>
+                    <div class="stat-sub-grid-4">
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Min</div>
+                            <div class="stat-sub-value" id="minPoints">0</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="maxPoints">0</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Max</div>
+                            <div class="stat-sub-value" id="maxPoints">0</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="avgPoints">0</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Avg</div>
+                            <div class="stat-sub-value" id="avgPoints">0</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Total</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="totalPoints">0</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Total</div>
+                            <div class="stat-sub-value" id="totalPoints">0</div>
                         </div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">InStat Index</div>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="minIndex">0</div>
+                    <div class="stat-sub-grid-3">
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Min</div>
+                            <div class="stat-sub-value" id="minIndex">0</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="maxIndex">0</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Max</div>
+                            <div class="stat-sub-value" id="maxIndex">0</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="avgIndex">0</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Avg</div>
+                            <div class="stat-sub-value" id="avgIndex">0</div>
                         </div>
                     </div>
                 </div>
@@ -252,45 +309,45 @@
                     <div class="stat-label">Shot Accuracy</div>
                     <div class="stat-value" id="shotAccuracy">0%</div>
                 </div>
-				<div class="stat-card">
+                <div class="stat-card">
                     <div class="stat-label">Plus/Minus</div>
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="minPlusMinus">0</div>
+                    <div class="stat-sub-grid-4">
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Min</div>
+                            <div class="stat-sub-value" id="minPlusMinus">0</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="maxPlusMinus">0</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Max</div>
+                            <div class="stat-sub-value" id="maxPlusMinus">0</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="avgPlusMinus">0</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Avg</div>
+                            <div class="stat-sub-value" id="avgPlusMinus">0</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Total</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="totalPlusMinus">0</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Total</div>
+                            <div class="stat-sub-value" id="totalPlusMinus">0</div>
                         </div>
                     </div>
                 </div>
-				<div class="stat-card">
+                <div class="stat-card">
                     <div class="stat-label">Blocked Shots</div>
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="minBlockedShots">0</div>
+                    <div class="stat-sub-grid-4">
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Min</div>
+                            <div class="stat-sub-value" id="minBlockedShots">0</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="maxBlockedShots">0</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Max</div>
+                            <div class="stat-sub-value" id="maxBlockedShots">0</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="avgBlockedShots">0</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Avg</div>
+                            <div class="stat-sub-value" id="avgBlockedShots">0</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Total</div>
-                            <div style="font-size: 24px; font-weight: bold; color: #667eea;" id="totalBlockedShots">0</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Total</div>
+                            <div class="stat-sub-value" id="totalBlockedShots">0</div>
                         </div>
                     </div>
                 </div>
@@ -304,35 +361,35 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Time on Ice</div>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
-                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="minTimeOnIce">0:00</div>
+                    <div class="stat-sub-grid-3">
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Min</div>
+                            <div class="stat-sub-value-time" id="minTimeOnIce">0:00</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
-                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="maxTimeOnIce">0:00</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Max</div>
+                            <div class="stat-sub-value-time" id="maxTimeOnIce">0:00</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
-                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="avgTimeOnIce">0:00</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Avg</div>
+                            <div class="stat-sub-value-time" id="avgTimeOnIce">0:00</div>
                         </div>
                     </div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Shift Duration</div>
-                    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Min</div>
-                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="minShiftDuration">0:00</div>
+                    <div class="stat-sub-grid-3">
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Min</div>
+                            <div class="stat-sub-value-time" id="minShiftDuration">0:00</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Max</div>
-                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="maxShiftDuration">0:00</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Max</div>
+                            <div class="stat-sub-value-time" id="maxShiftDuration">0:00</div>
                         </div>
-                        <div style="text-align: center;">
-                            <div style="font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px;">Avg</div>
-                            <div style="font-size: 20px; font-weight: bold; color: #667eea;" id="avgShiftDuration">0:00</div>
+                        <div class="stat-sub-item">
+                            <div class="stat-sub-label">Avg</div>
+                            <div class="stat-sub-value-time" id="avgShiftDuration">0:00</div>
                         </div>
                     </div>
                 </div>
@@ -377,6 +434,13 @@
 
     <script>
         let chartInstances = {};
+
+        // Optimized: Shared chart configuration
+        const commonChartOptions = {
+            responsive: true,
+            maintainAspectRatio: true,
+            scales: { y: { beginAtZero: true } }
+        };
 
         function timeToMinutes(timeStr) {
             if (!timeStr) return 0;
@@ -425,35 +489,73 @@
             }
         }
 
-    function parseCSVData(csvData) {
-        return csvData.map(row => {
-            const opponent = row.OpponentName;
-            return {
-                date: row.ReportDate,
-                averageShift: row.AverageShift || "00:00:00",
-                opponent: opponent.substring(0, 20),
-                index: parseInt(row.InStatIndex) || 0,
-                goals: parseInt(row.Goals) || 0,
-                assists: parseInt(row.Assists) || 0,
-                points: parseInt(row.Points) || 0,
-                plusMinus: parseInt(row.PlusMinus) || 0,
-                toi: row.TimeOnIce || "00:00:00",
-                shots: parseInt(row.Shots) || 0,
-                sog: parseInt(row.ShotsOnGoal) || 0,
-                pp: row.PowerPlayTime || "00:00:00",
-                sh: row.ShortHandedTime || "00:00:00",
-                corsiPlus: parseInt(row.CorsiPlus) || 0,
-                corsiMinus: parseInt(row.CorsiMinus) || 0,
-                hits: parseInt(row.HitsDelivered) || 0,
-                hitsAgainst: parseInt(row.HitsAgainst) || 0,
-                blocks: parseInt(row.BlockedShots) || 0,
-                playerName: row.PlayerName,
-                teamName: row.TeamName,
-				opponentName: row.OpponentName,
-                jerseyNumber: row.PlayerJerseyNumber
-            };
-        });
-    }
+        function parseCSVData(csvData) {
+            return csvData.map(row => {
+                const opponent = row.OpponentName;
+                return {
+                    // Player info
+                    playerName: row.PlayerName,
+                    teamName: row.TeamName,
+                    jerseyNumber: row.PlayerJerseyNumber,
+                    // Game info
+                    date: row.ReportDate,
+                    opponent: opponent.substring(0, 20),
+                    // Performance stats
+                    index: parseInt(row.InStatIndex) || 0,
+                    goals: parseInt(row.Goals) || 0,
+                    assists: parseInt(row.Assists) || 0,
+                    points: parseInt(row.Points) || 0,
+                    plusMinus: parseInt(row.PlusMinus) || 0,
+                    // Time stats
+                    toi: row.TimeOnIce || "00:00:00",
+                    averageShift: row.AverageShift || "00:00:00",
+                    pp: row.PowerPlayTime || "00:00:00",
+                    sh: row.ShortHandedTime || "00:00:00",
+                    // Shooting stats
+                    shots: parseInt(row.Shots) || 0,
+                    sog: parseInt(row.ShotsOnGoal) || 0,
+                    // Advanced stats
+                    corsiPlus: parseInt(row.CorsiPlus) || 0,
+                    corsiMinus: parseInt(row.CorsiMinus) || 0,
+                    // Physical stats
+                    hits: parseInt(row.HitsDelivered) || 0,
+                    hitsAgainst: parseInt(row.HitsAgainst) || 0,
+                    blocks: parseInt(row.BlockedShots) || 0
+                };
+            });
+        }
+
+        // Optimized: Extracted shared CSV parsing logic
+        function processCSVData(csvText, fileName) {
+            const errorDiv = document.getElementById('errorMessage');
+            const fileNameSpan = document.getElementById('fileName');
+            
+            fileNameSpan.textContent = fileName;
+            
+            Papa.parse(csvText, {
+                header: true,
+                dynamicTyping: false,
+                skipEmptyLines: true,
+                complete: function(results) {
+                    try {
+                        if (results.data.length === 0) {
+                            throw new Error('CSV file is empty');
+                        }
+                        const parsedData = parseCSVData(results.data);
+                        renderDashboard(parsedData);
+                    } catch (error) {
+                        errorDiv.textContent = 'Error parsing CSV: ' + error.message;
+                        errorDiv.style.display = 'block';
+                        console.error('Parse error:', error);
+                    }
+                },
+                error: function(error) {
+                    errorDiv.textContent = 'Error reading file: ' + error.message;
+                    errorDiv.style.display = 'block';
+                    console.error('File error:', error);
+                }
+            });
+        }
 
         function destroyCharts() {
             Object.values(chartInstances).forEach(chart => {
@@ -523,13 +625,12 @@
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
+                    ...commonChartOptions,
                     plugins: { legend: { display: false } }
                 }
             });
 
-            // Chart 2: Points Distribution
+            // Chart 2: Points
             chartInstances.points = new Chart(document.getElementById('pointsChart'), {
                 type: 'bar',
                 data: {
@@ -537,39 +638,33 @@
                     datasets: [{
                         label: 'Goals',
                         data: data.map(g => g.goals),
-                        backgroundColor: '#4ade80'
+                        backgroundColor: '#10b981'
                     }, {
                         label: 'Assists',
                         data: data.map(g => g.assists),
-                        backgroundColor: '#60a5fa'
+                        backgroundColor: '#3b82f6'
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    scales: {
-                        x: { stacked: true },
-                        y: { stacked: true, beginAtZero: true }
-                    }
-                }
+                options: commonChartOptions
             });
 
             // Chart 3: Time on Ice
             chartInstances.time = new Chart(document.getElementById('timeChart'), {
-                type: 'bar',
+                type: 'line',
                 data: {
                     labels: data.map(g => g.opponent),
                     datasets: [{
-                        label: 'Minutes',
+                        label: 'Time on Ice (min)',
                         data: data.map(g => timeToMinutes(g.toi)),
-                        backgroundColor: '#f59e0b'
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.1)',
+                        tension: 0.4,
+                        fill: true
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    plugins: { legend: { display: false } },
-                    scales: { y: { beginAtZero: true } }
+                    ...commonChartOptions,
+                    plugins: { legend: { display: false } }
                 }
             });
 
@@ -588,8 +683,7 @@
                     }]
                 },
                 options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
+                    ...commonChartOptions,
                     plugins: { legend: { display: false } },
                     scales: {
                         y: { 
@@ -621,11 +715,7 @@
                         backgroundColor: '#8b5cf6'
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    scales: { y: { beginAtZero: true } }
-                }
+                options: commonChartOptions
             });
 
             // Chart 6: Special Teams Time
@@ -643,11 +733,7 @@
                         backgroundColor: '#ef4444'
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    scales: { y: { beginAtZero: true } }
-                }
+                options: commonChartOptions
             });
 
             // Chart 7: Corsi Events
@@ -671,11 +757,7 @@
                         backgroundColor: '#ef4444'
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    scales: { y: { beginAtZero: true } }
-                }
+                options: commonChartOptions
             });
 
             // Chart 8: Physical Play
@@ -697,11 +779,7 @@
                         backgroundColor: '#8b5cf6'
                     }]
                 },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: true,
-                    scales: { y: { beginAtZero: true } }
-                }
+                options: commonChartOptions
             });
 
             document.getElementById('dashboard').classList.add('active');
@@ -710,45 +788,20 @@
         function handleFileUpload(event) {
             const file = event.target.files[0];
             const errorDiv = document.getElementById('errorMessage');
-            const fileNameSpan = document.getElementById('fileName');
-
+            
             errorDiv.style.display = 'none';
             
             if (!file) return;
 
-            fileNameSpan.textContent = file.name;
-
-            Papa.parse(file, {
-                header: true,
-                dynamicTyping: false,
-                skipEmptyLines: true,
-                complete: function(results) {
-                    try {
-                        if (results.data.length === 0) {
-                            throw new Error('CSV file is empty');
-                        }
-
-                        const parsedData = parseCSVData(results.data);
-                        renderDashboard(parsedData);
-                    } catch (error) {
-                        errorDiv.textContent = 'Error parsing CSV: ' + error.message;
-                        errorDiv.style.display = 'block';
-                        console.error('Parse error:', error);
-                    }
-                },
-                error: function(error) {
-                    errorDiv.textContent = 'Error reading file: ' + error.message;
-                    errorDiv.style.display = 'block';
-                    console.error('File error:', error);
-                }
-            });
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                processCSVData(e.target.result, file.name);
+            };
+            reader.readAsText(file);
         }
 
-        // Automatically load output.csv if it exists in the same directory
-        // Note: This only works when served from a web server (http://), not when opened directly (file://)
-        // For local file system use, please use the file upload button above
+        // Auto-load output.csv if available (works only when served from a web server)
         window.addEventListener('DOMContentLoaded', function() {
-            // Check if we're running on a web server
             if (window.location.protocol === 'file:') {
                 console.log('Running from file system. Auto-load not available due to browser security restrictions.');
                 console.log('Please use the file upload button or serve this file from a local web server.');
@@ -763,32 +816,9 @@
                     throw new Error('output.csv not found');
                 })
                 .then(csvText => {
-                    const fileNameSpan = document.getElementById('fileName');
-                    fileNameSpan.textContent = 'output.csv (auto-loaded)';
-                    
-                    Papa.parse(csvText, {
-                        header: true,
-                        dynamicTyping: false,
-                        skipEmptyLines: true,
-                        complete: function(results) {
-                            try {
-                                if (results.data.length === 0) {
-                                    throw new Error('CSV file is empty');
-                                }
-
-                                const parsedData = parseCSVData(results.data);
-                                renderDashboard(parsedData);
-                            } catch (error) {
-                                console.error('Auto-load parse error:', error);
-                            }
-                        },
-                        error: function(error) {
-                            console.error('Auto-load error:', error);
-                        }
-                    });
+                    processCSVData(csvText, 'output.csv (auto-loaded)');
                 })
                 .catch(error => {
-                    // Silently fail if output.csv doesn't exist - user can still upload manually
                     console.log('output.csv not found, waiting for manual upload');
                 });
         });
