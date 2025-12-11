@@ -9,7 +9,7 @@ namespace HudlReader.Lib;
 
 public class InStatSnapshot(
     string reportName,
-    DateTime reportDate,
+    DateOnly reportDate,
     string teamName,
     string opponentName,
     string playerName,
@@ -45,7 +45,7 @@ public class InStatSnapshot(
 {
 
     public string ReportName { get; } = reportName;
-    public DateTime ReportDate { get; } = reportDate;
+    public DateOnly ReportDate { get; } = reportDate;
     public string TeamName { get; } = teamName;
     public string OpponentName { get; } = opponentName;
     public string PlayerName { get; } = playerName;
@@ -91,7 +91,7 @@ public class InStatSnapshot(
 
             string reportName = splitLines[1];
             // Parse the date using a custom date time format
-            DateTime reportDate = DateTime.ParseExact(splitLines[2], "dd.MM.yyyy", CultureInfo.InvariantCulture);
+            DateOnly reportDate = DateOnly.FromDateTime(DateTime.ParseExact(splitLines[2], "dd.MM.yyyy", CultureInfo.InvariantCulture));
             string teamName = splitLines[3];
 
             // Opponent name
