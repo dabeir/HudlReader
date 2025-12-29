@@ -240,6 +240,9 @@
             <label for="csvFile" class="file-input-label">Choose CSV File</label>
         </div>
         <span class="file-name" id="fileName">No file selected</span>
+        <button id="exportBtn" class="file-input-label" style="display: none; margin-top: 15px;" onclick="exportDashboard()">
+            💾 Save Static Dashboard
+        </button>
         <div class="error-message" id="errorMessage"></div>
     </div>
 
@@ -784,21 +787,42 @@
         });
 
         document.getElementById('dashboard').classList.add('active');
+        document.getElementById('exportBtn').style.display = 'inline-block';
     }
 
     function handleFileUpload(event) {
         const file = event.target.files[0];
         const errorDiv = document.getElementById('errorMessage');
-
         errorDiv.style.display = 'none';
-
         if (!file) return;
-
         const reader = new FileReader();
         reader.onload = function(e) {
             processCSVData(e.target.result, file.name);
         };
         reader.readAsText(file);
+    }
+
+    function exportDashboard() {
+        const clone = document.documentElement.cloneNode(true);
+        const uploadSection = clone.querySelector('.upload-section');
+        if (uploadSection) uploadSection.remove();
+        const canvases = document.querySelectorAll('canvas');
+        const clonedCanvases = clone.querySelectorAll('canvas');
+        canvases.forEach((canvas, index) => {
+            const img = document.createElement('img');
+            img.src = canvas.toDataURL('image/png');
+            img.style.maxWidth = '100%';
+            img.style.height = 'auto';
+            clonedCanvases[index].replaceWith(img);
+        });
+        const htmlContent = '<!DOCTYPE html>\n' + clone.outerHTML;
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'hockey-dashboard-static.html';
+        a.click();
+        URL.revokeObjectURL(url);
     }
 
     // Auto-load output.csv if available (works only when served from a web server)
