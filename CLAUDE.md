@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Solution Overview
 
-A .NET 10.0 solution (`HudlReader.sln`) that parses InStat/Hudl hockey player-performance PDF reports and turns them into a CSV file plus a browsable HTML dashboard. It consists of three projects:
+A .NET 10.0 solution (`HudlReader.slnx`) that parses InStat/Hudl hockey player-performance PDF reports and turns them into a CSV file plus a browsable HTML dashboard. It consists of three projects:
 
 - **`HudlReader.Lib`** — Shared library: PDF parsing (`InStatParser`, `InStatSnapshot`), CSV export (`CsvExportService`), and the embedded `Dashboard.html` resource.
 - **`HudlReader.Cli`** — Console app (`System.CommandLine`). Takes `--in`/`--out` directory arguments and drives `InStatParser` headlessly.
@@ -16,7 +16,7 @@ There are no automated tests in this repository.
 
 ```bash
 # Build the entire solution
-dotnet build HudlReader.sln
+dotnet build HudlReader.slnx
 
 # Run the CLI
 dotnet run --project HudlReader.Cli -- --in "C:\hudlreports" --out "C:\csvoutput"

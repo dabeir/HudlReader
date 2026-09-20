@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Docs/">
+    <File Path="CLAUDE.md" />
+  </Folder>
+  <Project Path="HudlReader.Cli/HudlReader.Cli.csproj" />
+  <Project Path="HudlReader.Lib/HudlReader.Lib.csproj" />
+  <Project Path="HudlReader.UI/HudlReader.UI.csproj" />
+</Solution>
