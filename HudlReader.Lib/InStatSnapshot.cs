@@ -41,7 +41,12 @@ public class InStatSnapshot(
     decimal xGoalsPerShot,
     decimal xGoalsPerGoal,
     decimal teamXGoalsWhenOnIce,
-    decimal opponentsXGoalsWhenOnIce)
+    decimal opponentsXGoalsWhenOnIce,
+    int puckRecoveries,
+    int puckLosses,
+    int puckBattlesWon,
+    int puckBattlesLost,
+    int puckBattlesWonPercentage)
 {
 
     public string ReportName { get; } = reportName;
@@ -78,6 +83,11 @@ public class InStatSnapshot(
     public decimal XGoalsGoals { get; } = xGoalsPerGoal;
     public decimal TeamXGoalsWhenOnIce { get; } = teamXGoalsWhenOnIce;
     public decimal OpponentsXGoalsWhenOnIce { get; } = opponentsXGoalsWhenOnIce;
+    public int PuckRecoveries { get; } = puckRecoveries;
+    public int PuckLosses { get; } = puckLosses;
+    public int PuckBattlesWon { get; } = puckBattlesWon;
+    public int PuckBattlesLost { get; } = puckBattlesLost;
+    public int PuckBattlesWonPercentage { get; } = puckBattlesWonPercentage;
 
     public static bool TryParse(string pdfFile, out InStatSnapshot? inStatSnapshot)
     {
@@ -118,7 +128,7 @@ public class InStatSnapshot(
             (int powerPlayShots, int powerPlayShotsOnGoal, int powerPlayShotsOnGoalPercentage) =
                 ParsePowerPlayShotsOnGoal(pageTwoText);
 
-            int corsi = ParseIntValue(pageTwoText, @"CORSI\s+(\d+)");
+            int corsi = ParseIntValue(pageTwoText, @"CORSI\s+(-?\d+)");
             int corsiPlus = ParseIntValue(pageTwoText, @"CORSI\+\s+(\d+)");
             int corsiMinus = ParseIntValue(pageTwoText, @"CORSI-\s+(\d+)");
             int hitsDelivered = ParseIntValue(pageTwoText, @"Hits\s+([—\-]|\d+\.?\d*)");
@@ -132,6 +142,11 @@ public class InStatSnapshot(
             decimal teamXGoalsWhenOnIce = ParseDecimalValue(pageTwoText, @"Team xG when on ice\s+(\d+\.?\d*)");
             decimal opponentsXGoalsWhenOnIce =
                 ParseDecimalValue(pageTwoText, @"Opponent's xG when on ice\s+(\d+\.?\d*)");
+
+            int puckRecoveries = ParseIntValue(pageTwoText, @"Puck recoveries\s+([—\-]|\d+\.?\d*)");
+            int puckLosses = ParseIntValue(pageTwoText, @"Puck losses\s+([—\-]|\d+\.?\d*)");
+            (int puckBattlesWon, int puckBattlesLost, int puckBattlesWonPercentage) =
+                ParsePuckBattles(pageTwoText);
 
             inStatSnapshot = new InStatSnapshot(
                 reportName,
@@ -167,7 +182,12 @@ public class InStatSnapshot(
                 xGoalsShots,
                 xGoalsGoals,
                 teamXGoalsWhenOnIce,
-                opponentsXGoalsWhenOnIce
+                opponentsXGoalsWhenOnIce,
+                puckRecoveries,
+                puckLosses,
+                puckBattlesWon,
+                puckBattlesLost,
+                puckBattlesWonPercentage
             );
 
             return true;
@@ -321,6 +341,23 @@ public class InStatSnapshot(
         return (0, 0, 0);
     }
 
+    // Helper method to parse puck battles won/lost with win percentage
+    // Example: "Puck battles 5/3 63%" returns (5, 3, 63); "Puck battles —" returns (0, 0, 0)
+    private static (int won, int lost, int wonPercentage) ParsePuckBattles(string text)
+    {
+        string pattern = @"Puck battles\s+(\d+)\s*/\s*(\d+)\s+(\d+)%";
+        Match match = Regex.Match(text, pattern, RegexOptions.IgnoreCase);
+        if (match.Success)
+        {
+            int won = int.Parse(match.Groups[1].Value);
+            int lost = int.Parse(match.Groups[2].Value);
+            int wonPercentage = int.Parse(match.Groups[3].Value);
+            return (won, lost, wonPercentage);
+        }
+
+        return (0, 0, 0);
+    }
+
     public override string ToString()
     {
         StringBuilder sb = new();
@@ -359,6 +396,11 @@ public class InStatSnapshot(
         sb.AppendLine($"xG / goals: {this.XGoalsGoals}");
         sb.AppendLine($"Team xG when on ice: {this.TeamXGoalsWhenOnIce}");
         sb.AppendLine($"Opponent's xG when on ice: {this.OpponentsXGoalsWhenOnIce}");
+        sb.AppendLine($"Puck Recoveries: {this.PuckRecoveries}");
+        sb.AppendLine($"Puck Losses: {this.PuckLosses}");
+        sb.AppendLine($"Puck Battles Won: {this.PuckBattlesWon}");
+        sb.AppendLine($"Puck Battles Lost: {this.PuckBattlesLost}");
+        sb.AppendLine($"Puck Battles Won Percentage: {this.PuckBattlesWonPercentage}%");
 
         return sb.ToString();
     }

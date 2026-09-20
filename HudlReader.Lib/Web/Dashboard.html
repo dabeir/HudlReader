@@ -363,6 +363,31 @@
                 <div class="stat-value" id="totalHitsReceived">0</div>
             </div>
             <div class="stat-card">
+                <div class="stat-label">Total Puck Recoveries</div>
+                <div class="stat-value" id="totalPuckRecoveries">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Total Puck Losses</div>
+                <div class="stat-value" id="totalPuckLosses">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Puck Battles</div>
+                <div class="stat-sub-grid-3">
+                    <div class="stat-sub-item">
+                        <div class="stat-sub-label">Won</div>
+                        <div class="stat-sub-value" id="totalPuckBattlesWon">0</div>
+                    </div>
+                    <div class="stat-sub-item">
+                        <div class="stat-sub-label">Lost</div>
+                        <div class="stat-sub-value" id="totalPuckBattlesLost">0</div>
+                    </div>
+                    <div class="stat-sub-item">
+                        <div class="stat-sub-label">Win %</div>
+                        <div class="stat-sub-value" id="puckBattlesWinPercentage">0%</div>
+                    </div>
+                </div>
+            </div>
+            <div class="stat-card">
                 <div class="stat-label">Time on Ice</div>
                 <div class="stat-sub-grid-3">
                     <div class="stat-sub-item">
@@ -430,6 +455,10 @@
             <div class="chart-container">
                 <div class="chart-title">Physical Play Metrics</div>
                 <canvas id="physicalChart"></canvas>
+            </div>
+            <div class="chart-container">
+                <div class="chart-title">Puck Possession</div>
+                <canvas id="puckChart"></canvas>
             </div>
         </div>
     </div>
@@ -524,7 +553,12 @@
                 // Physical stats
                 hits: parseInt(row.HitsDelivered) || 0,
                 hitsAgainst: parseInt(row.HitsAgainst) || 0,
-                blocks: parseInt(row.BlockedShots) || 0
+                blocks: parseInt(row.BlockedShots) || 0,
+                // Puck possession stats
+                puckRecoveries: parseInt(row.PuckRecoveries) || 0,
+                puckLosses: parseInt(row.PuckLosses) || 0,
+                puckBattlesWon: parseInt(row.PuckBattlesWon) || 0,
+                puckBattlesLost: parseInt(row.PuckBattlesLost) || 0
             };
         });
     }
@@ -584,6 +618,14 @@
         const totalAssists = data.reduce((sum, g) => sum + g.assists, 0);
         const totalHitsDelivered = data.reduce((sum, g) => sum + g.hits, 0);
         const totalHitsReceived = data.reduce((sum, g) => sum + g.hitsAgainst, 0);
+        const totalPuckRecoveries = data.reduce((sum, g) => sum + g.puckRecoveries, 0);
+        const totalPuckLosses = data.reduce((sum, g) => sum + g.puckLosses, 0);
+        const totalPuckBattlesWon = data.reduce((sum, g) => sum + g.puckBattlesWon, 0);
+        const totalPuckBattlesLost = data.reduce((sum, g) => sum + g.puckBattlesLost, 0);
+        const totalPuckBattles = totalPuckBattlesWon + totalPuckBattlesLost;
+        const puckBattlesWinPercentage = totalPuckBattles > 0
+            ? Math.round((totalPuckBattlesWon / totalPuckBattles) * 100)
+            : 0;
         const totalShots = data.reduce((sum, g) => sum + g.shots, 0);
         const totalSOG = data.reduce((sum, g) => sum + g.sog, 0);
         const shotAccuracy = totalShots > 0 ? Math.round((totalSOG / totalShots) * 100) : 0;
@@ -605,6 +647,11 @@
         document.getElementById('totalAssists').textContent = totalAssists;
         document.getElementById('totalHitsDelivered').textContent = totalHitsDelivered;
         document.getElementById('totalHitsReceived').textContent = totalHitsReceived;
+        document.getElementById('totalPuckRecoveries').textContent = totalPuckRecoveries;
+        document.getElementById('totalPuckLosses').textContent = totalPuckLosses;
+        document.getElementById('totalPuckBattlesWon').textContent = totalPuckBattlesWon;
+        document.getElementById('totalPuckBattlesLost').textContent = totalPuckBattlesLost;
+        document.getElementById('puckBattlesWinPercentage').textContent = puckBattlesWinPercentage + '%';
         document.getElementById('shotAccuracy').textContent = shotAccuracy + '%';
 
         setStatValues('PlusMinus', plusMinusStats);
@@ -781,6 +828,32 @@
                     label: 'Blocked Shots',
                     data: data.map(g => g.blocks),
                     backgroundColor: '#8b5cf6'
+                }]
+            },
+            options: commonChartOptions
+        });
+
+        // Chart 9: Puck Possession
+        chartInstances.puck = new Chart(document.getElementById('puckChart'), {
+            type: 'bar',
+            data: {
+                labels: data.map(g => g.opponent),
+                datasets: [{
+                    label: 'Puck Recoveries',
+                    data: data.map(g => g.puckRecoveries),
+                    backgroundColor: '#22c55e'
+                }, {
+                    label: 'Puck Losses',
+                    data: data.map(g => g.puckLosses),
+                    backgroundColor: '#ef4444'
+                }, {
+                    label: 'Battles Won',
+                    data: data.map(g => g.puckBattlesWon),
+                    backgroundColor: '#3b82f6'
+                }, {
+                    label: 'Battles Lost',
+                    data: data.map(g => g.puckBattlesLost),
+                    backgroundColor: '#f97316'
                 }]
             },
             options: commonChartOptions
