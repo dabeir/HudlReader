@@ -2,8 +2,8 @@ README
 -------------
 
 IMPORTANT:
-.NET 9 Runtime is required run this application and can be downloaded from here:
-https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-9.0.307-windows-x64-installer
+.NET 10 Runtime is required run this application and can be downloaded from here:
+https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-10.0.100-windows-x64-installer
 
 How to execute:
 HudlReader.Cli.exe --in "path to folder containing all hudl reports" --out "path to csv output folder"
