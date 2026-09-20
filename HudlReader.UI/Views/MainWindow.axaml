@@ -22,7 +22,7 @@
                 <TextBox Grid.Column="0" 
                          Text="{Binding InputFolder, Mode=TwoWay}" 
                          IsReadOnly="True"
-                         Watermark="Select input folder..."/>
+                         PlaceholderText="Select input folder..."/>
                 <Button Grid.Column="1" 
                         Name="InputFolderButton"
                         Content="Browse..." 
@@ -39,7 +39,7 @@
                 <TextBox Grid.Column="0" 
                          Text="{Binding OutputFolder, Mode=TwoWay}" 
                          IsReadOnly="True"
-                         Watermark="Select output folder..."/>
+                         PlaceholderText="Select output folder..."/>
                 <Button Grid.Column="1" 
                         Name="OutputFolderButton"
                         Content="Browse..." 
