@@ -6,9 +6,12 @@
     <title>Hockey Performance Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
-    <!-- Generated alongside output.csv (if present) so this page can auto-load it even when opened
-         directly from disk - a plain <script src> load isn't blocked by file:// like fetch() is. -->
-    <script src="dashboard-data.js"></script>
+    <!-- HudlReader embeds the parsed output.csv data directly here when it generates this file
+         (replacing this comment with an inline <script>), so the dashboard can auto-load it even
+         when opened directly from disk (file://), where fetch() of local files is blocked. This
+         comment is otherwise inert - harmless if this template is opened before ever being run
+         through the parser. -->
+    <!--HUDL_READER_DASHBOARD_DATA-->
     <style>
         :root,
         [data-theme="dark"] {
@@ -327,7 +330,7 @@
 
     <div class="upload-section">
         <h2>Hockey Performance Analytics Dashboard</h2>
-        <p class="upload-subtitle">Upload a CSV file with hockey statistics to visualize performance data</p>
+        <p class="upload-subtitle">Upload the parsed Hudl InStat statistics (output.csv) to visualize performance data</p>
         <div class="file-input-wrapper">
             <input type="file" id="csvFile" accept=".csv" onchange="handleFileUpload(event)">
             <label for="csvFile" class="file-input-label">Choose CSV File</label>
@@ -1067,7 +1070,7 @@
         if (uploadSection) uploadSection.remove();
         const toggleBar = clone.querySelector('.theme-toggle-bar');
         if (toggleBar) toggleBar.remove();
-        const dataScript = clone.querySelector('script[src="dashboard-data.js"]');
+        const dataScript = clone.querySelector('#dashboardDataScript');
         if (dataScript) dataScript.remove();
         const canvases = document.querySelectorAll('canvas');
         const clonedCanvases = clone.querySelectorAll('canvas');
@@ -1093,9 +1096,9 @@
 
     // Auto-load output.csv if available
     window.addEventListener('DOMContentLoaded', function() {
-        // dashboard-data.js (written alongside output.csv by HudlReader) mirrors the CSV into a
-        // plain script so it loads even when this page is opened directly from disk (file://),
-        // where fetch() of local files is blocked by the browser.
+        // HudlReader embeds the CSV data directly into this page (see the inline
+        // #dashboardDataScript tag) so it loads even when this page is opened directly from disk
+        // (file://), where fetch() of local files is blocked by the browser.
         if (window.HUDL_READER_DASHBOARD_DATA && window.HUDL_READER_DASHBOARD_DATA.csv) {
             processCSVData(
                 window.HUDL_READER_DASHBOARD_DATA.csv,
@@ -1106,11 +1109,11 @@
         }
 
         if (window.location.protocol === 'file:') {
-            console.log('Running from file system without dashboard-data.js. Please use the file upload button, or re-run parsing to regenerate it.');
+            console.log('This copy of Dashboard.html has no embedded data. Please use the file upload button, or re-run parsing to regenerate it.');
             return;
         }
 
-        // Fallback for when this page is served from a web server without dashboard-data.js present
+        // Fallback for when this page is served from a web server without embedded data present
         fetch('output.csv')
             .then(response => {
                 if (response.ok) {

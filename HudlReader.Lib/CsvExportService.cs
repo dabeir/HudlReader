@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Reflection;
 using System.Text.Json;
 using CsvHelper;
 using CsvHelper.Configuration;
@@ -7,6 +8,9 @@ namespace HudlReader.Lib;
 
 public class CsvExportService
 {
+    private const string DashboardResourceFileName = "Dashboard.html";
+    private const string DashboardDataPlaceholder = "<!--HUDL_READER_DASHBOARD_DATA-->";
+
     public CsvExportService()
     {
     }
@@ -20,17 +24,19 @@ public class CsvExportService
             await csv.WriteRecordsAsync(inStatSnapshots);
         }
 
-        await WriteDashboardDataFile(csvOutputPath);
+        await WriteDashboardWithEmbeddedData(csvOutputPath);
     }
 
     // Dashboard.html can't auto-load output.csv via fetch() when opened directly from disk
-    // (browsers block file:// fetch of local files), so mirror the CSV into a plain <script>
-    // that Dashboard.html can include instead - script tags aren't subject to that restriction.
-    private static async Task WriteDashboardDataFile(string csvOutputPath)
+    // (browsers block file:// fetch of local files), so embed the CSV directly into a copy of
+    // the dashboard template instead - a plain inline <script> isn't subject to that restriction.
+    private static async Task WriteDashboardWithEmbeddedData(string csvOutputPath)
     {
         string csvText = await File.ReadAllTextAsync(csvOutputPath);
         string? directory = Path.GetDirectoryName(csvOutputPath);
-        string dataFilePath = Path.Combine(directory ?? string.Empty, "dashboard-data.js");
+        string dashboardOutputPath = Path.Combine(directory ?? string.Empty, DashboardResourceFileName);
+
+        string template = await ReadEmbeddedDashboardTemplate();
 
         var payload = new
         {
@@ -38,8 +44,26 @@ public class CsvExportService
             generatedAt = DateTimeOffset.Now.ToString("o")
         };
 
-        string jsContent = $"window.HUDL_READER_DASHBOARD_DATA = {JsonSerializer.Serialize(payload)};";
-        await File.WriteAllTextAsync(dataFilePath, jsContent);
+        // Guard against the (unlikely) case of "</script" appearing in report/team/player names,
+        // which would otherwise prematurely close the <script> tag this gets embedded into.
+        string json = JsonSerializer.Serialize(payload)
+            .Replace("</script", "<\\/script", StringComparison.OrdinalIgnoreCase);
+
+        string dataScript = $"<script id=\"dashboardDataScript\">window.HUDL_READER_DASHBOARD_DATA = {json};</script>";
+        string finalHtml = template.Replace(DashboardDataPlaceholder, dataScript);
+
+        await File.WriteAllTextAsync(dashboardOutputPath, finalHtml);
+    }
+
+    private static async Task<string> ReadEmbeddedDashboardTemplate()
+    {
+        Assembly assembly = typeof(CsvExportService).GetTypeInfo().Assembly;
+        string resourceName = assembly.GetManifestResourceNames()
+            .Single(name => name.EndsWith(DashboardResourceFileName));
+
+        await using Stream stream = assembly.GetManifestResourceStream(resourceName)!;
+        using StreamReader reader = new StreamReader(stream);
+        return await reader.ReadToEndAsync();
     }
 }
 
