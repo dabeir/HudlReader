@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d" 
         d:DesignWidth="600" 
-        d:DesignHeight="285"
+        d:DesignHeight="320"
         Width="600"
-        Height="285"
+        Height="320"
         x:Class="HudlReader.UI.Views.MainWindow"
         WindowStartupLocation="CenterScreen"
         x:DataType="vm:MainWindowViewModel"
@@ -19,9 +19,8 @@
         <StackPanel>
             <TextBlock Text="Input Folder:" Margin="0,0,0,5"/>
             <Grid ColumnDefinitions="*,Auto">
-                <TextBox Grid.Column="0" 
-                         Text="{Binding InputFolder, Mode=TwoWay}" 
-                         IsReadOnly="True"
+                <TextBox Grid.Column="0"
+                         Text="{Binding InputFolder, Mode=TwoWay}"
                          PlaceholderText="Select input folder..."/>
                 <Button Grid.Column="1" 
                         Name="InputFolderButton"
@@ -36,9 +35,8 @@
         <StackPanel>
             <TextBlock Text="Output Folder:" Margin="0,0,0,5"/>
             <Grid ColumnDefinitions="*,Auto">
-                <TextBox Grid.Column="0" 
-                         Text="{Binding OutputFolder, Mode=TwoWay}" 
-                         IsReadOnly="True"
+                <TextBox Grid.Column="0"
+                         Text="{Binding OutputFolder, Mode=TwoWay}"
                          PlaceholderText="Select output folder..."/>
                 <Button Grid.Column="1" 
                         Name="OutputFolderButton"
@@ -57,6 +55,10 @@
                          Maximum="100"
                          Height="25"/>
         </StackPanel>
+
+        <!-- Open Dashboard Option -->
+        <CheckBox Content="Open dashboard after parsing is complete"
+                  IsChecked="{Binding OpenDashboardAfterParsing, Mode=TwoWay}"/>
 
         <!-- Start Button -->
         <Button Content="Parse Data" 

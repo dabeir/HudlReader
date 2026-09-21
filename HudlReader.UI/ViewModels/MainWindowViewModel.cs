@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -19,6 +20,8 @@ public partial class MainWindowViewModel : ViewModelBase
     private string? _outputFolder;
 
     [ObservableProperty] private int _progress;
+
+    [ObservableProperty] private bool _openDashboardAfterParsing = true;
     
     // This will be called from the Window code-behind
     public Func<Task<string?>> FuncPickFolderAsync { get; set; }
@@ -55,11 +58,17 @@ public partial class MainWindowViewModel : ViewModelBase
         {
             InStatParser parser = new(this.InputFolder, this.OutputFolder, i =>
             {
-                // Update the progress bar on the UI thread 
+                // Update the progress bar on the UI thread
                 Dispatcher.UIThread.InvokeAsync(() => { this.Progress = i; });
             });
-            
+
             await parser.ParsePlayerReports();
+
+            if (this.OpenDashboardAfterParsing)
+            {
+                string dashboardPath = Path.Combine(this.OutputFolder, dashboardFilename);
+                Process.Start(new ProcessStartInfo(dashboardPath) { UseShellExecute = true });
+            }
         });
         
         return task;

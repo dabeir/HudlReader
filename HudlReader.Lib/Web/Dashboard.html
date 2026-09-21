@@ -6,6 +6,9 @@
     <title>Hockey Performance Dashboard</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <!-- Generated alongside output.csv (if present) so this page can auto-load it even when opened
+         directly from disk - a plain <script src> load isn't blocked by file:// like fetch() is. -->
+    <script src="dashboard-data.js"></script>
     <style>
         :root,
         [data-theme="dark"] {
@@ -163,6 +166,12 @@
         .header p {
             color: var(--text-secondary);
             font-size: 14px;
+        }
+
+        .data-timestamp {
+            color: var(--text-muted);
+            font-size: 13px;
+            margin-top: 8px;
         }
 
         .stats-grid {
@@ -334,6 +343,7 @@
         <div class="header">
             <h1 id="playerName">Player Performance Dashboard</h1>
             <p id="playerInfo">Loading...</p>
+            <p class="data-timestamp" id="dataTimestamp"></p>
         </div>
 
         <div class="stats-grid">
@@ -551,6 +561,18 @@
 <script>
     let chartInstances = {};
     let lastRenderedData = null;
+    let lastRenderedTimestamp = null;
+
+    // Accepts an ISO date string, a Last-Modified header string, or a ms-since-epoch number
+    function formatTimestamp(value) {
+        if (!value) return null;
+        const date = new Date(value);
+        if (isNaN(date.getTime())) return null;
+        return date.toLocaleString(undefined, {
+            year: 'numeric', month: 'short', day: 'numeric',
+            hour: 'numeric', minute: '2-digit'
+        });
+    }
 
     const THEME_STORAGE_KEY = 'hudlReaderTheme';
     let currentTheme = 'dark';
@@ -712,7 +734,7 @@
     }
 
     // Optimized: Extracted shared CSV parsing logic
-    function processCSVData(csvText, fileName) {
+    function processCSVData(csvText, fileName, timestamp) {
         const errorDiv = document.getElementById('errorMessage');
         const fileNameSpan = document.getElementById('fileName');
 
@@ -728,7 +750,7 @@
                         throw new Error('CSV file is empty');
                     }
                     const parsedData = parseCSVData(results.data);
-                    renderDashboard(parsedData);
+                    renderDashboard(parsedData, timestamp);
                 } catch (error) {
                     errorDiv.textContent = 'Error parsing CSV: ' + error.message;
                     errorDiv.style.display = 'block';
@@ -750,9 +772,13 @@
         chartInstances = {};
     }
 
-    function renderDashboard(data) {
+    function renderDashboard(data, timestamp) {
         destroyCharts();
         lastRenderedData = data;
+        // Re-renders (e.g. on theme toggle) call this without a timestamp - keep the one already shown
+        if (timestamp !== undefined) {
+            lastRenderedTimestamp = timestamp;
+        }
 
         const colors = getChartColors();
         const commonOptions = getCommonChartOptions(colors);
@@ -762,6 +788,9 @@
             document.getElementById('playerName').textContent = data[0].playerName + ' - Season Performance Dashboard';
             document.getElementById('playerInfo').textContent =
                 `${data[0].teamName} | Jersey #${data[0].jerseyNumber}`;
+            const formattedTimestamp = formatTimestamp(lastRenderedTimestamp);
+            document.getElementById('dataTimestamp').textContent =
+                formattedTimestamp ? `Data as of ${formattedTimestamp}` : '';
         }
 
         // Calculate summary stats
@@ -1027,7 +1056,7 @@
         if (!file) return;
         const reader = new FileReader();
         reader.onload = function(e) {
-            processCSVData(e.target.result, file.name);
+            processCSVData(e.target.result, file.name, file.lastModified);
         };
         reader.readAsText(file);
     }
@@ -1038,6 +1067,8 @@
         if (uploadSection) uploadSection.remove();
         const toggleBar = clone.querySelector('.theme-toggle-bar');
         if (toggleBar) toggleBar.remove();
+        const dataScript = clone.querySelector('script[src="dashboard-data.js"]');
+        if (dataScript) dataScript.remove();
         const canvases = document.querySelectorAll('canvas');
         const clonedCanvases = clone.querySelectorAll('canvas');
         canvases.forEach((canvas, index) => {
@@ -1060,23 +1091,38 @@
     // Apply the saved (or default) theme immediately, before any data is loaded
     applyTheme(currentTheme);
 
-    // Auto-load output.csv if available (works only when served from a web server)
+    // Auto-load output.csv if available
     window.addEventListener('DOMContentLoaded', function() {
-        if (window.location.protocol === 'file:') {
-            console.log('Running from file system. Auto-load not available due to browser security restrictions.');
-            console.log('Please use the file upload button or serve this file from a local web server.');
+        // dashboard-data.js (written alongside output.csv by HudlReader) mirrors the CSV into a
+        // plain script so it loads even when this page is opened directly from disk (file://),
+        // where fetch() of local files is blocked by the browser.
+        if (window.HUDL_READER_DASHBOARD_DATA && window.HUDL_READER_DASHBOARD_DATA.csv) {
+            processCSVData(
+                window.HUDL_READER_DASHBOARD_DATA.csv,
+                'output.csv (auto-loaded)',
+                window.HUDL_READER_DASHBOARD_DATA.generatedAt
+            );
             return;
         }
 
+        if (window.location.protocol === 'file:') {
+            console.log('Running from file system without dashboard-data.js. Please use the file upload button, or re-run parsing to regenerate it.');
+            return;
+        }
+
+        // Fallback for when this page is served from a web server without dashboard-data.js present
         fetch('output.csv')
             .then(response => {
                 if (response.ok) {
-                    return response.text();
+                    return response.text().then(csvText => ({
+                        csvText,
+                        timestamp: response.headers.get('Last-Modified')
+                    }));
                 }
                 throw new Error('output.csv not found');
             })
-            .then(csvText => {
-                processCSVData(csvText, 'output.csv (auto-loaded)');
+            .then(({ csvText, timestamp }) => {
+                processCSVData(csvText, 'output.csv (auto-loaded)', timestamp);
             })
             .catch(error => {
                 console.log('output.csv not found, waiting for manual upload');

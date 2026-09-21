@@ -24,9 +24,9 @@ dotnet run --project HudlReader.Cli -- --in "C:\hudlreports" --out "C:\csvoutput
 # Run the desktop GUI
 dotnet run --project HudlReader.UI
 
-# Publish the CLI as a self-contained single-file Windows x64 executable
-# (SelfContained/PublishSingleFile/RuntimeIdentifier are already baked into HudlReader.Cli.csproj)
-dotnet publish HudlReader.Cli/HudlReader.Cli.csproj -c Release
+# Publish the UI as a self-contained single-file Windows x64 executable
+# (SelfContained/PublishSingleFile/RuntimeIdentifier are already baked into HudlReader.UI.csproj)
+dotnet publish HudlReader.UI/HudlReader.UI.csproj -c Release -r win-x64 --no-self-contained -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
 ```
 
 .NET 10 runtime is required to run the published output; see `HudlReader.Cli/README.txt` for the end-user instructions that ship alongside the CLI executable.
@@ -60,6 +60,7 @@ No explicit workflow notes yet — infer from the user's usual conventions unles
 - Uses CsvHelper's `AutoMap` against every public property of `InStatSnapshot`, so **adding a public property to `InStatSnapshot` automatically adds a CSV column** — no export-side wiring needed (unlike MKAT's Excel exporter, there's no manual column-index list to keep in sync).
 - `CsvExportMap` exists as the place to add `.Map(...)`/`.Ignore()` overrides later; currently it does nothing beyond the automap.
 - Output is always a single file named `output.csv` in the chosen output directory, overwritten on every run — there's no per-run timestamping or append mode.
+- **`Write` also emits a companion `dashboard-data.js`** in the same directory, right after `output.csv` — it re-reads the just-written CSV and mirrors its text (JSON-encoded) plus a `generatedAt` timestamp into `window.HUDL_READER_DASHBOARD_DATA`. This exists solely so `Dashboard.html` can auto-load the data via a plain `<script src>` tag, which (unlike `fetch()`) isn't blocked when the page is opened directly from disk over `file://`. Both `Cli` and `UI` get this for free since they share this method.
 
 ### CLI (`HudlReader.Cli`)
 
@@ -80,6 +81,10 @@ No explicit workflow notes yet — infer from the user's usual conventions unles
 - Fully standalone HTML/CSS/JS — no build step, no bundler. Pulls **Chart.js 3.9.1** and **PapaParse 5.3.2** from cdnjs.
 - Reads whatever `output.csv` the user drops in/uploads client-side (PapaParse) and renders stat cards/charts entirely in the browser; it has no dependency on the .NET projects at runtime beyond being handed a CSV in the expected column shape.
 - Because CsvHelper auto-maps `InStatSnapshot`'s public properties in declaration order, **reordering or renaming properties on `InStatSnapshot` changes the CSV header row the dashboard expects** — check `Dashboard.html`'s column-name references before renaming a property.
+- **Auto-load on page open prefers `dashboard-data.js` over `fetch('output.csv')`.** On `DOMContentLoaded` it first checks `window.HUDL_READER_DASHBOARD_DATA` (set by the `<script src="dashboard-data.js">` tag `CsvExportService` generates) since that works even under `file://`; the `fetch('output.csv')` path only runs as a fallback for when the page is served over an actual web server without that companion file present.
+- **Dark (default) / light theme**, toggled via CSS custom properties on `<html data-theme="...">`, persisted to `localStorage`. Chart.js draws to `<canvas>` so it can't read CSS variables — `getChartColors()`/`getCommonChartOptions()` supply theme-aware colors instead, recomputed on every `renderDashboard()` call (which already runs on every toggle, since charts are destroyed/recreated each render).
+- **The header shows a "Data as of ..." timestamp** next to the player info, sourced differently depending on how the CSV was loaded: `dashboard-data.js`'s `generatedAt` (auto-load), the uploaded `File` object's `lastModified` (manual upload), or the `Last-Modified` response header (server-fetch fallback). `formatTimestamp()` accepts any of these shapes (ISO string, HTTP date string, or ms-epoch number).
+- `exportDashboard()` strips the upload section, theme toggle, and `dashboard-data.js` script tag from the cloned static export (the last one specifically to avoid the exported file re-running `renderDashboard()` against canvases that no longer exist, since canvases are baked to `<img>` before export).
 
 ### Packaging
 
