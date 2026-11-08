@@ -95,7 +95,7 @@ No explicit workflow notes yet — infer from the user's usual conventions unles
   - **`HudlReader.Cli-win-x64.zip`** — `HudlReader.Cli.exe` (self-contained single-file; `PublishSingleFile`/`SelfContained`/`RuntimeIdentifier=win-x64` are set in its `.csproj`) plus `HudlReader.Cli/README.txt`.
 - `HudlReader.UI/Program.cs` calls `VelopackApp.Build().Run()` as the first line of `Main` — required for Velopack's install/uninstall hooks. Auto-update (checking a release feed) is not wired up.
 - Version format is `Year.Month.Build.Day` (`<Version>` in `HudlReader.UI.csproj`, used for local runs). Velopack needs strict 3-part SemVer2, so the script repacks it as `Year.Month.Day+Build` (e.g. `2026.11.1.8` → `2026.11.8+1`). It accepts `-Version` to override the csproj value (CI uses this). The vpk warning about the legacy `RELEASES` file excluding a `+` version is expected.
-- No icon is passed to `vpk` yet — the UI project only has the default `avalonia-logo.ico`.
+- App icon: `HudlReader.UI/Assets/hudlreader.ico` (16/32/48/256 PNG-compressed entries) is used as the exe `ApplicationIcon`, the `MainWindow` `Icon`, and the installer `--icon`. The source artwork is `docs/logo.svg` (`docs/logo.png` is the 256px render used in the README); the dashboard has a matching inline base64 favicon. Regenerate all of these from the SVG if the logo changes.
 
 ### Continuous Integration
 

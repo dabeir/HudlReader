@@ -49,6 +49,9 @@ $cliPublishDir = Join-Path $publishRoot "cli"
 $releasesDir = Join-Path $PSScriptRoot "Releases"
 
 if (Test-Path $publishRoot) { Remove-Item $publishRoot -Recurse -Force }
+# vpk refuses to pack a version <= one already in the output folder, so start clean each run
+# (CI always starts empty; auto-update/delta packages aren't used, so nothing is lost).
+if (Test-Path $releasesDir) { Remove-Item $releasesDir -Recurse -Force }
 New-Item -ItemType Directory -Force $releasesDir | Out-Null
 
 # --- Desktop app: framework-dependent single-file exe, wrapped in a Velopack installer ---
@@ -63,7 +66,8 @@ vpk pack `
     -e HudlReader.UI.exe `
     -o $releasesDir `
     --packTitle "HudlReader" `
-    --packAuthors "dabeir"
+    --packAuthors "dabeir" `
+    --icon (Join-Path $PSScriptRoot "HudlReader.UI\Assets\hudlreader.ico")
 if ($LASTEXITCODE -ne 0) { throw "vpk pack failed." }
 
 # --- Command-line tool: self-contained single-file exe (settings live in the .csproj), zipped ---

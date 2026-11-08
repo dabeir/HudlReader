@@ -10,6 +10,7 @@
              it's only used as-is for local builds and pack-release.ps1 runs without -Version. -->
         <Version>2026.11.1.8</Version>
         <Product>HudlReader</Product>
+        <ApplicationIcon>Assets\hudlreader.ico</ApplicationIcon>
     </PropertyGroup>
 
     <ItemGroup>

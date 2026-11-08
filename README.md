@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="docs/logo.png" alt="HudlReader logo" width="128" height="128">
+</p>
+
 # HudlReader
 
 Turn a folder of **Hudl / InStat hockey player-performance PDF reports** into a single CSV file and an interactive, self-contained HTML dashboard that tracks a player's trends game over game.
