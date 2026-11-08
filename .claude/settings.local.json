@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(dotnet build *)",
+      "Bash(\"HudlReader.Cli/bin/Release/net10.0/win-x64/publish/HudlReader.Cli.exe\" --help)",
+      "Bash(tasklist //FI \"IMAGENAME eq HudlReader.UI.exe\")",
+      "Bash(tasklist //FI \"PID eq 39696\")",
+      "Bash(dotnet run *)",
+      "Bash(npx --version)",
+      "Bash(dotnet tool *)",
+      "Bash(dotnet list *)",
+      "Bash(curl -s https://api.nuget.org/v3-flatcontainer/avalonia.diagnostics/index.json)",
+      "Bash(curl -s https://api.nuget.org/v3-flatcontainer/avalonia/index.json)",
+      "Bash(curl -s https://api.nuget.org/v3-flatcontainer/avalonia.diagnostics/11.3.22/avalonia.diagnostics.nuspec)",
+      "WebSearch",
+      "WebFetch(domain:docs.avaloniaui.net)",
+      "Read(//tmp/**)",
+      "Bash(taskkill //PID 4088 //F)"
+    ]
+  }
+}
