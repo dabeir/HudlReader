@@ -62,7 +62,18 @@ Every row in `output.csv` includes:
 - [.NET 10 runtime](https://dotnet.microsoft.com/download/dotnet/10.0) to run it, or the .NET 10 SDK to build from source
 - A modern web browser to view the dashboard
 
+### Download
+
+Grab the latest build from the [Releases page](https://github.com/dabeir/HudlReader/releases/latest):
+
+| File | What it is |
+|---|---|
+| `HudlReader-win-Setup.exe` | Installer for the desktop app. Requires the .NET 10 runtime. |
+| `HudlReader.Cli-win-x64.zip` | Command-line tool. Self-contained, so no .NET install is needed. |
+
 ### Option 1: Desktop app
+
+Run `HudlReader-win-Setup.exe`, or from source:
 
 ```bash
 dotnet run --project HudlReader.UI
@@ -74,6 +85,8 @@ dotnet run --project HudlReader.UI
 4. Click **Parse Data**.
 
 ### Option 2: Command line
+
+Unzip `HudlReader.Cli-win-x64.zip` and run `HudlReader.Cli.exe --in "C:\hudlreports" --out "C:\csvoutput"`, or from source:
 
 ```bash
 dotnet run --project HudlReader.Cli -- --in "C:\hudlreports" --out "C:\csvoutput"
@@ -104,15 +117,25 @@ cd HudlReader
 dotnet build HudlReader.slnx
 ```
 
-### Publishing a standalone executable
+### Building the release files locally
 
 ```bash
-# Command-line tool: single self-contained .exe (settings are in the .csproj)
-dotnet publish HudlReader.Cli/HudlReader.Cli.csproj -c Release
-
-# Desktop app: single-file .exe (requires the .NET 10 runtime on the target machine)
-dotnet publish HudlReader.UI/HudlReader.UI.csproj -c Release -r win-x64 --no-self-contained -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+dotnet tool install -g vpk   # one-time: Velopack CLI
+./pack-release.ps1
 ```
+
+This writes `HudlReader-win-Setup.exe` and `HudlReader.Cli-win-x64.zip` to `Releases/`.
+
+### Publishing a release
+
+Releases are built by GitHub Actions ([`.github/workflows/build.yml`](.github/workflows/build.yml)). Push a tag in `vYYYY.M.D` format:
+
+```bash
+git tag v2026.11.8
+git push origin v2026.11.8
+```
+
+The workflow builds both files and attaches them to a new GitHub Release with auto-generated release notes. Ordinary pushes to `main` only check that the solution builds.
 
 ## Project structure
 
@@ -147,6 +170,7 @@ HudlReader/
 - [CsvHelper](https://joshclose.github.io/CsvHelper/) for CSV writing
 - [Avalonia UI](https://avaloniaui.net/) and [CommunityToolkit.Mvvm](https://learn.microsoft.com/dotnet/communitytoolkit/mvvm/) for the desktop app
 - [System.CommandLine](https://github.com/dotnet/command-line-api) for the CLI
+- [Velopack](https://velopack.io/) for the Windows installer
 - [Chart.js](https://www.chartjs.org/) and [PapaParse](https://www.papaparse.com/) for the dashboard
 
 ## License

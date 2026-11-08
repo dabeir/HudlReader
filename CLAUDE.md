@@ -24,9 +24,11 @@ dotnet run --project HudlReader.Cli -- --in "C:\hudlreports" --out "C:\csvoutput
 # Run the desktop GUI
 dotnet run --project HudlReader.UI
 
-# Publish the UI as a self-contained single-file Windows x64 executable
-# (SelfContained/PublishSingleFile/RuntimeIdentifier are already baked into HudlReader.UI.csproj)
+# Publish the UI as a framework-dependent single-file Windows x64 executable
 dotnet publish HudlReader.UI/HudlReader.UI.csproj -c Release -r win-x64 --no-self-contained -p:PublishSingleFile=true -p:IncludeNativeLibrariesForSelfExtract=true
+
+# Build release assets (Velopack installer + CLI zip) into Releases/ -- requires: dotnet tool install -g vpk
+./pack-release.ps1
 ```
 
 .NET 10 runtime is required to run the published output; see `HudlReader.Cli/README.txt` for the end-user instructions that ship alongside the CLI executable.
@@ -88,9 +90,13 @@ No explicit workflow notes yet — infer from the user's usual conventions unles
 
 ### Packaging
 
-- Only `HudlReader.Cli` is currently configured for self-contained single-file publishing (`PublishSingleFile`, `SelfContained`, `RuntimeIdentifier=win-x64`, embedded PDB) directly in its `.csproj` — no separate publish profile or installer script exists yet (unlike MKAT's Velopack setup).
-- `HudlReader.UI` has no publish-specific MSBuild properties set yet; it currently builds as a normal framework-dependent app.
+- `pack-release.ps1` (repo root) builds both release assets into `Releases/` (gitignored, along with its `publish-temp/` scratch folder):
+  - **`HudlReader-win-Setup.exe`** — `HudlReader.UI` published framework-dependent + single-file, then wrapped in a **Velopack** installer via the `vpk` CLI (`dotnet tool install -g vpk`). Modeled on MKAT's `pack-release.ps1`.
+  - **`HudlReader.Cli-win-x64.zip`** — `HudlReader.Cli.exe` (self-contained single-file; `PublishSingleFile`/`SelfContained`/`RuntimeIdentifier=win-x64` are set in its `.csproj`) plus `HudlReader.Cli/README.txt`.
+- `HudlReader.UI/Program.cs` calls `VelopackApp.Build().Run()` as the first line of `Main` — required for Velopack's install/uninstall hooks. Auto-update (checking a release feed) is not wired up.
+- Version format is `Year.Month.Build.Day` (`<Version>` in `HudlReader.UI.csproj`, used for local runs). Velopack needs strict 3-part SemVer2, so the script repacks it as `Year.Month.Day+Build` (e.g. `2026.11.1.8` → `2026.11.8+1`). It accepts `-Version` to override the csproj value (CI uses this). The vpk warning about the legacy `RELEASES` file excluding a `+` version is expected.
+- No icon is passed to `vpk` yet — the UI project only has the default `avalonia-logo.ico`.
 
 ### Continuous Integration
 
-No CI configuration (`.github/workflows/`) exists in this repository yet.
+`.github/workflows/build.yml` (mirrors MKAT's) runs on pushes to `main`, `v*` tags, and manual dispatch. Every run does `dotnet build HudlReader.slnx -c Release`. Tag pushes also install `vpk`, run `pack-release.ps1`, and create a GitHub Release (`softprops/action-gh-release`, auto-generated notes) with both assets attached. The version is computed in the workflow: `Year.Month.Day` from the tag (must be `vYYYY.M.D`, e.g. `v2026.11.8`) or today's UTC date, with `Build` = `github.run_number`.

@@ -1,0 +1,62 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "10.0.x"
+
+      # Version is Year.Month.Build.Day: Year/Month/Day come from the pushed tag (expected
+      # format vYYYY.M.D) when tag-triggered, otherwise from today's date. Build is always
+      # github.run_number, so it auto-increments on every run without any manual bumping.
+      - name: Compute version
+        id: version
+        run: |
+          if ("${{ github.ref_type }}" -eq "tag") {
+            $tagParts = ("${{ github.ref_name }}" -replace '^v', '') -split '\.'
+            if ($tagParts.Count -ne 3) { throw "Expected tag in vYYYY.M.D format, got '${{ github.ref_name }}'." }
+            $year, $month, $day = $tagParts
+          } else {
+            $today = (Get-Date).ToUniversalTime()
+            $year, $month, $day = $today.Year, $today.Month, $today.Day
+          }
+          $version = "$year.$month.${{ github.run_number }}.$day"
+          Write-Host "Computed version: $version"
+          echo "version=$version" >> $env:GITHUB_OUTPUT
+
+      - name: Build solution
+        run: dotnet build HudlReader.slnx --configuration Release -p:Version=${{ steps.version.outputs.version }}
+
+      # Packaging only runs for version tags (e.g. v2026.11.8) -- regular pushes to main
+      # just verify the build compiles.
+      - name: Install Velopack CLI
+        if: startsWith(github.ref, 'refs/tags/')
+        run: dotnet tool install -g vpk
+
+      - name: Package release assets
+        if: startsWith(github.ref, 'refs/tags/')
+        run: ./pack-release.ps1 -Version ${{ steps.version.outputs.version }}
+
+      - name: Create GitHub Release
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: softprops/action-gh-release@v2
+        with:
+          generate_release_notes: true
+          files: |
+            Releases/HudlReader-win-Setup.exe
+            Releases/HudlReader.Cli-win-x64.zip

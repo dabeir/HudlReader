@@ -6,6 +6,10 @@
         <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
         <ApplicationManifest>app.manifest</ApplicationManifest>
         <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+        <!-- Year.Month.Build.Day. CI overrides this per run (see .github/workflows/build.yml);
+             it's only used as-is for local builds and pack-release.ps1 runs without -Version. -->
+        <Version>2026.11.1.8</Version>
+        <Product>HudlReader</Product>
     </PropertyGroup>
 
     <ItemGroup>
@@ -19,6 +23,7 @@
         <PackageReference Include="Avalonia.Themes.Fluent" Version="12.1.2" />
         <PackageReference Include="Avalonia.Fonts.Inter" Version="12.1.2" />
         <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+        <PackageReference Include="Velopack" Version="1.2.0" />
     </ItemGroup>
 
     <ItemGroup>
